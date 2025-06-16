@@ -1,7 +1,15 @@
 import React from 'react';
-import { Outlet, Link } from 'react-router-dom';
+import { Outlet, Link, useNavigate } from 'react-router-dom';
 
 const Layout = () => {
+  const navigate = useNavigate();
+  const isLoggedIn = !!localStorage.getItem("user");
+
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    navigate("/login");
+  };
+
   return (
     <>
       <header className="navbar">
@@ -11,6 +19,15 @@ const Layout = () => {
           <Link to="/shop">Shop</Link>
           <Link to="/movies">Movies</Link>
           <Link to="/games">Games</Link>
+
+          {isLoggedIn ? (
+            <button onClick={handleLogout} className="logout-btn">Logout</button>
+          ) : (
+            <>
+              <Link to="/login">Login</Link>
+              <Link to="/signup">Sign Up</Link>
+            </>
+          )}
         </nav>
       </header>
 
@@ -18,33 +35,32 @@ const Layout = () => {
         <Outlet />
       </main>
 
-
       <footer className="footer">
         <div className="footer-column">
           <h4>Mall Mart</h4>
           <ul>
-             <li>About Us</li>
-             <li>Careers</li>
-             <li>Press</li>
+            <li>About Us</li>
+            <li>Careers</li>
+            <li>Press</li>
           </ul>
         </div>
 
-       <div className="footer-column">
-         <h4>Customer Service</h4>
+        <div className="footer-column">
+          <h4>Customer Service</h4>
           <ul>
             <li>Contact Us</li>
             <li>Returns</li>
             <li>FAQs</li>
           </ul>
-       </div>
+        </div>
 
         <div className="footer-column">
-         <h4>Departments</h4>
-           <ul>
-             <li>Shopping</li>
-             <li>Movies</li>
-             <li>Games</li>
-           </ul>
+          <h4>Departments</h4>
+          <ul>
+            <li>Shopping</li>
+            <li>Movies</li>
+            <li>Games</li>
+          </ul>
         </div>
 
         <div className="footer-column">
@@ -56,11 +72,10 @@ const Layout = () => {
           </ul>
         </div>
 
-       <div className="footer-bottom">
+        <div className="footer-bottom">
           © 2025 Mall Mart. All rights reserved.
-       </div>
+        </div>
       </footer>
-
     </>
   );
 };
