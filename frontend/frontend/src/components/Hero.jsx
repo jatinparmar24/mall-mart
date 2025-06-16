@@ -1,5 +1,7 @@
 import React from 'react';
 
+
+
 const Hero = () => {
   return (
     <section className="hero-section">
@@ -42,6 +44,7 @@ const Hero = () => {
         </div>
       </div>
     </section>
+
   );
 };
 

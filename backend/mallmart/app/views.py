@@ -3,6 +3,9 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import UserAccount
 from .serializers import UserAccountSerializer
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+import json
 
 class SignupView(APIView):
     def post(self, request):
@@ -31,11 +34,7 @@ class SignupView(APIView):
 
         if UserAccount.objects.filter(contact=contact).exists():
             return Response({"error": "Contact already exists"}, status=400)
-        
-        print("Incoming data:", request.data)
 
-
-        # Only save required fields
         serializer = UserAccountSerializer(data={
             "username": username,
             "email": email,
@@ -50,17 +49,21 @@ class SignupView(APIView):
         return Response(serializer.errors, status=400)
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class LoginView(APIView):
     def post(self, request):
-        email = request.data.get("email")
-        password = request.data.get("password")
+        data = json.loads(request.body)
+        email = data.get("email")
+        password = data.get("password")
 
         try:
-            user = UserAccount.objects.get(email=email, password=password)
-            return Response({
-                "id": user.id,
-                "username": user.username,
-                "email": user.email,
-            }, status=200)
+            user = UserAccount.objects.get(email=email)
+            if user.password == password:  # ⚠️ Use hashed password in real apps
+                return Response({
+                    "name": user.username,   # Use `.username`, not `.name`
+                    "email": user.email
+                })
+            else:
+                return Response({"error": "Incorrect password"}, status=400)
         except UserAccount.DoesNotExist:
-            return Response({"error": "Invalid email or password"}, status=400)
+            return Response({"error": "User not found"}, status=404)

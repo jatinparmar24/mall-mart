@@ -3,7 +3,9 @@ import { Outlet, Link, useNavigate } from 'react-router-dom';
 
 const Layout = () => {
   const navigate = useNavigate();
-  const isLoggedIn = !!localStorage.getItem("user");
+
+  const user = JSON.parse(localStorage.getItem("user"));
+  const isLoggedIn = !!user;
 
   const handleLogout = () => {
     localStorage.removeItem("user");
@@ -16,12 +18,15 @@ const Layout = () => {
         <div className="logo">Mall Mart</div>
         <nav className="nav-links">
           <Link to="/">Home</Link>
-          <Link to="/shop">Shop</Link>
+          <Link to="/shopping">Shop</Link>
           <Link to="/movies">Movies</Link>
           <Link to="/games">Games</Link>
 
           {isLoggedIn ? (
-            <button onClick={handleLogout} className="logout-btn">Logout</button>
+            <>
+              <span className="user-name">Hi, {user.username}</span>
+              <button onClick={handleLogout} className="logout-btn">Logout</button>
+            </>
           ) : (
             <>
               <Link to="/login">Login</Link>

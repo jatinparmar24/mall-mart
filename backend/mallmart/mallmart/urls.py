@@ -16,12 +16,16 @@ Including another URLconf
 """
 from django.urls import path
 from rest_framework.routers import DefaultRouter
-from app.views import SignupView ,LoginView
+from app.views import SignupView, LoginView
 
+# If you're not using any ViewSets, you don't need the router.
+# You can remove this if it's not being used.
 router = DefaultRouter()
-# router.register(r'users', UserViewSet)  # optional, not used now
 
 urlpatterns = [
-    path('signup/', SignupView.as_view()),  
-    path('login/', LoginView.as_view()),  
+    path('signup/', SignupView.as_view(), name='signup'),
+    path('login/', LoginView.as_view(), name='login'),
 ]
+
+
+
