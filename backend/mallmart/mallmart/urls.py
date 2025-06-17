@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.urls import path
 from rest_framework.routers import DefaultRouter
-from app.views import SignupView, LoginView
+from app.views import *
 
 # If you're not using any ViewSets, you don't need the router.
 # You can remove this if it's not being used.
@@ -25,6 +25,8 @@ router = DefaultRouter()
 urlpatterns = [
     path('signup/', SignupView.as_view(), name='signup'),
     path('login/', LoginView.as_view(), name='login'),
+    path('api/purchases/',purchase_list_create),
+
 ]
 
 

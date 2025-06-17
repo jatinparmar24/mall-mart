@@ -1,47 +1,56 @@
-// src/components/BuyNow.jsx
-import React from "react";
+import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const BuyNow = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { item } = location.state || {};
+  const item = location.state?.item;
 
-  const user = JSON.parse(localStorage.getItem("user"));
+  useEffect(() => {
+    if (!item) {
+      alert("No item selected. Redirecting to items...");
+      navigate("/items");
+    }
+  }, [item, navigate]);
 
-  if (!item || !user) {
-    return <p>Invalid access. Please go back and try again.</p>;
-  }
+  const handleConfirmPurchase = async () => {
+    const user = localStorage.getItem("username"); // Replace with auth context if available
 
-  // Ensure price is a valid number
-  const price = typeof item.price === "string" ? parseFloat(item.price) : item.price || 0;
-  const discount = 0.1;
-  const finalPrice = price - price * discount;
+    if (!user) {
+      alert("You must be logged in to make a purchase.");
+      return;
+    }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    alert("🎉 Purchase successful!");
-    navigate("/items");
+    try {
+      const response = await axios.post("http://localhost:8000/api/purchases/", {
+        user: user,
+        item: item.name,
+        price: item.price
+      });
+
+
+      alert("Purchase successful!");
+      navigate("/items");
+    } catch (error) {
+      console.error("Purchase Error:", error);
+      alert("Purchase failed. Please try again.");
+    }
   };
 
-  return (
-    <div className="buy-now-container">
-      <div className="buy-now-card">
-        <img src={item.img} alt={item.name} />
-        <h2>🛒 Buy: {item.name}</h2>
-        <p><strong>User:</strong> {user.name || user.username} ({user.email})</p>
-        <p><strong>Original Price:</strong> ₹{price.toFixed(2)}</p>
-        <p><strong>Discount:</strong> 10%</p>
-        <p><strong>Final Price:</strong> <span className="final-price">₹{finalPrice.toFixed(2)}</span></p>
+  if (!item) return null;
 
-        <form onSubmit={handleSubmit} className="buy-now-form">
-          <input type="text" value={user.name || user.username} readOnly />
-          <input type="email" value={user.email} readOnly />
-          <input type="text" value={item.name} readOnly />
-          <input type="text" value={`₹${finalPrice.toFixed(2)}`} readOnly />
-          <button type="submit">Confirm Purchase</button>
-        </form>
-      </div>
+  return (
+    <div className="buy-now-page">
+      <h1>🧾 Confirm Your Purchase</h1>
+      <img
+        src={item.img || "https://via.placeholder.com/300x200?text=No+Image"}
+        alt={item.name}
+        style={{ maxWidth: "300px", borderRadius: "8px", margin: "10px 0" }}
+      />
+      <h2>{item.name}</h2>
+      <p><strong>Price:</strong> ₹{item.price}</p>
+      <button onClick={handleConfirmPurchase}>Confirm Purchase</button>
     </div>
   );
 };

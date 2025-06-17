@@ -1,11 +1,13 @@
 from rest_framework.views import APIView
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from .models import UserAccount
-from .serializers import UserAccountSerializer
+from .models import UserAccount,Purchase
+from .serializers import UserAccountSerializer,PurchaseSerializer
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 import json
+
 
 class SignupView(APIView):
     def post(self, request):
@@ -58,12 +60,29 @@ class LoginView(APIView):
 
         try:
             user = UserAccount.objects.get(email=email)
-            if user.password == password:  # ⚠️ Use hashed password in real apps
+            if user.password == password:  
                 return Response({
-                    "name": user.username,   # Use `.username`, not `.name`
+                    "username": user.username,
                     "email": user.email
                 })
             else:
                 return Response({"error": "Incorrect password"}, status=400)
         except UserAccount.DoesNotExist:
             return Response({"error": "User not found"}, status=404)
+
+
+
+
+
+@api_view(['GET', 'POST'])
+def purchase_list_create(request):
+    if request.method == 'GET':
+        purchases = Purchase.objects.all().order_by('-date')
+        serializer = PurchaseSerializer(purchases, many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        serializer = PurchaseSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)

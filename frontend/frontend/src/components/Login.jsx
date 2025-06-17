@@ -17,10 +17,13 @@ const Login = () => {
     try {
       const res = await axios.post("http://localhost:8000/login/", { email, password });
       if (res.status === 200) {
-        localStorage.setItem("user", JSON.stringify(res.data));
-        alert("Login successful!");
-        navigate("/");
-      }
+         const { username, email } = res.data;
+         localStorage.setItem("username", username);
+         localStorage.setItem("user", JSON.stringify(res.data)); 
+         alert("Login successful!");
+         navigate("/");
+     }
+
     } catch (err) {
       alert(err.response?.data?.error || "Login failed");
     }

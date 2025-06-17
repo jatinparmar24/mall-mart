@@ -8,6 +8,8 @@ import Items from './components/Items';
 import Home from './components/Home';
 import CategoryItems from "./components/CategoryItems";
 import BuyNow from './components/BuyNow';
+import AdminDashboard from "./components/AdminDashboard";
+
 
 const App = () => {
   return (
@@ -19,6 +21,7 @@ const App = () => {
         <Route path="items" element={<Items />} />
         <Route path="items/:category" element={<CategoryItems />} />
         <Route path="/buy" element={<BuyNow />} />
+        <Route path="Admindashboard" element={<AdminDashboard />} /> 
       </Route>
     </Routes>
   );

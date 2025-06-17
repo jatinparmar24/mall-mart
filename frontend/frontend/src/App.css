@@ -439,6 +439,30 @@
   background-color: #005bcc;
 }
 
+/* for item admin */
+.items-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px;
+}
+
+.admin-btn {
+  padding: 10px 15px;
+  background-color: #333;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s ease;
+}
+
+.admin-btn:hover {
+  background-color: #555;
+}
+
+/* for item admin */
 
 /* section3 Items Section */
 
@@ -623,6 +647,11 @@
 
 /* BuyNow */
 
+/* admin dashbaord for shopping */
+
+
+/* admin dashbaord for shopping */
+
 
 
 /* media query */
@@ -730,6 +759,8 @@
   }
 
   /* shopping section */
+
+  
 }
 
 @media (max-width: 1024px) {

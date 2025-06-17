@@ -1,7 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-
 const Items = () => {
   const navigate = useNavigate();
 
@@ -22,13 +21,26 @@ const Items = () => {
     navigate(`/items/${category.toLowerCase()}`);
   };
 
+  const goToAdminDashboard = () => {
+    navigate("/Admindashboard");  // ✅ Ensure this matches App.jsx route
+  };
+
   return (
     <div className="items-page">
-      <h1>🛍️ Shop by Category</h1>
+      <div className="items-header">
+        <h1>🛍️ Shop by Category</h1>
+        <button className="admin-btn" onClick={goToAdminDashboard}>
+          Admin Dashboard
+        </button>
+      </div>
       <div className="category-grid">
         {categories.map((item, idx) => (
           <div className="category-card" key={idx}>
-            <img src={item.img} alt={item.name} />
+            <img
+              src={item.img}
+              alt={`Category ${item.name}`}
+              onError={(e) => e.target.src = "https://via.placeholder.com/300x200?text=No+Image"}
+            />
             <h2>{item.name}</h2>
             <p>{item.desc}</p>
             <span className="offer">{item.offer}</span>

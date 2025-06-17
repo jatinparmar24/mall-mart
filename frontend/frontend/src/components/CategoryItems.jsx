@@ -50,16 +50,25 @@ const CategoryItems = () => {
   const navigate = useNavigate();
   const items = categoryData[category.toLowerCase()];
 
-  if (!items) return <h2 style={{ textAlign: "center" }}>Category not found 😞</h2>;
+  if (!items) {
+    return (
+      <div className="not-found">
+        <h2>❌ Category "{category}" not found</h2>
+        <button onClick={() => navigate("/items")}>⬅ Go Back</button>
+      </div>
+    );
+  }
 
   const handleBuyNow = (item) => {
-    const numericPrice = parseFloat(item.price.replace("₹", "").replace(",", ""));
+    const numericPrice = parseFloat(item.price.replace(/[₹,]/g, ""));
+    if (isNaN(numericPrice)) return alert("Invalid price format.");
+
     navigate("/buy", {
       state: {
         item: {
           name: item.name,
           price: numericPrice,
-          img: item.image,
+          img: item.image || "https://via.placeholder.com/300x200?text=No+Image",
         }
       }
     });
@@ -71,7 +80,7 @@ const CategoryItems = () => {
       <div className="items-grid">
         {items.map((item, index) => (
           <div className="item-card" key={index}>
-            <img src={item.image} alt={item.name} />
+            <img src={item.image || "https://via.placeholder.com/300x200?text=No+Image"} alt={item.name} />
             <h3>{item.name}</h3>
             <p>Price: {item.price}</p>
             <button onClick={() => handleBuyNow(item)}>Buy Now</button>
