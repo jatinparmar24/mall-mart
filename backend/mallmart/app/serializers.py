@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import UserAccount,Purchase,Cart,Movie
+from .models import UserAccount,Purchase,Cart,Movie,MovieBooking
 
 class UserAccountSerializer(serializers.ModelSerializer):
     class Meta:
@@ -21,7 +21,15 @@ class CartSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+# for movie
 class MovieSerializer(serializers.ModelSerializer):
     class Meta:
         model = Movie
+        fields = '__all__'
+
+
+# for movie booking
+class MovieBookingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MovieBooking
         fields = '__all__'

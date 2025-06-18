@@ -51,3 +51,21 @@ class Movie(models.Model):
 
     def __str__(self):
         return self.title
+
+# for moviebooking details
+
+
+class MovieBooking(models.Model):
+    movie_title = models.CharField(max_length=255, blank=True)
+    email = models.EmailField(blank=True)
+    seat = models.CharField(max_length=50, blank=True)
+    seat_count = models.PositiveIntegerField(default=1, blank=True, null=True)
+    row_type = models.CharField(max_length=50, blank=True)
+    amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.0, blank=True, null=True)
+    show_time = models.CharField(max_length=50, blank=True)
+    language = models.CharField(max_length=50, blank=True)
+    booked_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.movie_title} - {self.email}"
+

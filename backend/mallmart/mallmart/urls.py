@@ -30,6 +30,7 @@ urlpatterns = [
     path('api/purchases/',purchase_list_create),
     path('api/movies/', MovieListCreateView.as_view(), name='movie-list-create'),
     path('api/', include(router.urls)),
+    path('api/bookings/', MovieBookingCreateView.as_view(), name='movie-booking')
 
 
 ]

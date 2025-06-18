@@ -59,9 +59,20 @@ const MovieList = () => {
       <div className="booking-section">
         <div className="booking-header">
           <h2>🎟️ Book Your Movie</h2>
-          <button className="add-movie-btn" onClick={() => navigate("/admin/movies/add")}>
+          <button
+            className="add-movie-btn"
+            onClick={() => {
+              const user = JSON.parse(localStorage.getItem("mallmartUser"));
+              if (user && user.email && user.role === "movieadmin") {
+                navigate("/admin/movies/add");
+              } else {
+                navigate("/login", { state: { redirectTo: "/admin/movies/add" } });
+              }
+            }}
+          >
             ➕ Add New Movie
           </button>
+
         </div>
         <div className="movie-grid">
           {movies.map((movie, index) => (

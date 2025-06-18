@@ -2,8 +2,8 @@ from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status,viewsets,generics
-from .models import UserAccount,Purchase,Cart,Movie
-from .serializers import UserAccountSerializer,PurchaseSerializer,CartSerializer,MovieSerializer
+from .models import UserAccount,Purchase,Cart,Movie,MovieBooking
+from .serializers import UserAccountSerializer,PurchaseSerializer,CartSerializer,MovieSerializer,MovieBookingSerializer
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 import json
@@ -99,6 +99,28 @@ class CartViewSet(viewsets.ModelViewSet):
         return super().get_queryset()
 
 
+# for movie
 class MovieListCreateView(generics.ListCreateAPIView):
     queryset = Movie.objects.all().order_by('-created_at')
     serializer_class = MovieSerializer
+
+
+# for moviebooking
+class MovieBookingCreateView(generics.ListCreateAPIView):
+    queryset = MovieBooking.objects.all().order_by('-booked_at')
+    serializer_class = MovieBookingSerializer
+
+    def create(self, request, *args, **kwargs):
+        email = request.data.get("email")
+        movie_title = request.data.get("movie_title")
+        show_time = request.data.get("show_time")
+
+        # Check if booking already exists
+        if MovieBooking.objects.filter(email=email, movie_title=movie_title, show_time=show_time).exists():
+            return Response(
+                {"error": "You have already booked this movie at this time."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Proceed if no duplicates
+        return super().create(request, *args, **kwargs)

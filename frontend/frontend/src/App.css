@@ -1046,58 +1046,122 @@
 
 /* adminadd movie section */
 .admin-movie-form-container {
-  max-width: 600px;
-  margin: 60px auto;
-  background: linear-gradient(to right, #1e1e2f, #2c2943);
-  padding: 40px;
-  border-radius: 14px;
-  color: white;
-  box-shadow: 0 0 25px rgba(0, 0, 0, 0.6);
+  padding: 2rem;
+  max-width: 1100px;
+  margin: auto;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(to right, #ece9e6, #ffffff);
+  border-radius: 16px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
 }
 
-.admin-movie-form-container h2 {
-  text-align: center;
-  color: #ffcd59;
-  margin-bottom: 30px;
-}
-
+/* Form Grid */
 .admin-movie-form {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr 1fr;
+  margin-bottom: 2rem;
 }
 
 .admin-movie-form input {
-  padding: 12px 14px;
+  padding: 0.9rem;
   font-size: 1rem;
-  border: 1px solid #444;
-  border-radius: 8px;
-  background-color: #2d2d3f;
-  color: #fff;
+  border: 2px solid #90caf9;
+  border-radius: 12px;
+  background: #f5faff;
+  transition: border 0.3s ease;
+}
+
+.admin-movie-form input:focus {
+  outline: none;
+  border-color: #1976d2;
 }
 
 .admin-movie-form button {
-  padding: 12px;
-  background-color: #ff3c6f;
+  grid-column: span 2;
+  padding: 0.9rem;
+  background: linear-gradient(135deg, #42a5f5, #1e88e5);
   color: white;
   font-weight: bold;
   border: none;
-  border-radius: 8px;
+  border-radius: 12px;
   cursor: pointer;
-  transition: 0.3s ease;
+  transition: transform 0.2s ease;
 }
 
 .admin-movie-form button:hover {
-  background-color: #e72c5e;
+  transform: scale(1.02);
+  background: linear-gradient(135deg, #1e88e5, #1565c0);
 }
 
 .form-message {
-  margin-top: 20px;
-  text-align: center;
   font-weight: bold;
-  color: #89e889;
+  margin-bottom: 1rem;
+  color: #2e7d32;
 }
 
+/* Booking Table Section */
+.booking-list-section {
+  margin-top: 3rem;
+  background: #f0f4f8;
+  padding: 1.5rem;
+  border-radius: 16px;
+}
+
+.booking-list-section h3 {
+  margin-bottom: 1rem;
+  color: #1565c0;
+  font-size: 1.4rem;
+}
+
+/* Scroll Wrapper */
+.booking-table-wrapper {
+  overflow-x: auto;
+  border-radius: 10px;
+}
+
+/* Table Styling */
+.booking-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 800px;
+}
+
+.booking-table th,
+.booking-table td {
+  padding: 0.85rem 1rem;
+  text-align: center;
+  border-bottom: 1px solid #ccc;
+}
+
+.booking-table thead {
+  background-color: #1565c0;
+  color: white;
+}
+
+.booking-table tbody tr:nth-child(even) {
+  background-color: #e3f2fd;
+}
+
+.booking-table tbody tr:nth-child(odd) {
+  background-color: #ffffff;
+}
+
+.booking-table tbody tr:hover {
+  background-color: #bbdefb;
+  transition: background 0.2s ease;
+}
+
+/* Highlight column cells using nth-child */
+.booking-table td:nth-child(1) {
+  font-weight: bold;
+  color: #1e88e5;
+}
+
+.booking-table td:nth-child(7) {
+  color: #2e7d32;
+  font-weight: bold;
+}
 /* button for adminaddmovie */
 .booking-header {
   display: flex;
@@ -1125,49 +1189,104 @@
 
 
 /* bookingpage section */
+.booking-wrapper {
+  min-height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 100px 20px; /* avoids overlap with navbar/footer */
+  box-sizing: border-box;
+}
+
+/* Booking card */
 .booking-container {
-  padding: 3rem;
-  max-width: 600px;
-  margin: auto;
-  background: linear-gradient(135deg, #1e1e2f, #2b2b40);
-  color: white;
+  width: 100%;
+  max-width: 700px;
+  padding: 2rem;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  color: #fff;
   border-radius: 20px;
-  box-shadow: 0 0 20px rgba(0,0,0,0.3);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  transition: all 0.3s ease;
+}
+
+.booking-container h2 {
+  text-align: center;
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  color: #fdd835;
+}
+
+.booking-container h2 span {
+  color: #fff;
 }
 
 .booking-form {
-  display: flex;
-  flex-direction: column;
+  display: grid;
   gap: 1rem;
+  grid-template-columns: 1fr 1fr;
 }
 
-.booking-form input {
+.booking-form input,
+.booking-form select {
   padding: 0.8rem;
-  border-radius: 10px;
   border: none;
+  border-radius: 10px;
   font-size: 1rem;
 }
 
 .booking-form button {
+  grid-column: span 2;
   padding: 0.8rem;
-  font-size: 1rem;
-  background: #ff5f6d;
+  background-color: #00c853;
   color: white;
   border: none;
   border-radius: 10px;
+  font-weight: bold;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: background 0.3s ease;
 }
 
 .booking-form button:hover {
-  background: #ff2e63;
+  background-color: #00bfa5;
 }
 
-h2 span {
-  color: #ffcc00;
+.booking-form p {
+  grid-column: span 2;
+  font-size: 1rem;
+  background-color: #1b5e20;
+  padding: 0.5rem;
+  border-radius: 8px;
+  text-align: center;
 }
+
+.booking-summary {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: #263238;
+  border-radius: 15px;
+  color: #f5f5f5;
+  font-size: 1rem;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+
+.success-msg {
+  color: #00e676;
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+
 
 /* bookingpage section */
+
+
+
+
+
+
 
 /* media query */
 
@@ -1189,6 +1308,32 @@ h2 span {
     aspect-ratio: 16 / 9;
   }
   /* hero section */
+
+  /* booking move section */
+   .booking-wrapper {
+    padding: 60px 10px;
+  }
+
+  .booking-container {
+    padding: 1rem;
+    border-radius: 15px;
+  }
+
+  .booking-container h2 {
+    font-size: 1.2rem;
+  }
+
+  .booking-form input,
+  .booking-form select,
+  .booking-form button {
+    font-size: 0.9rem;
+    padding: 0.6rem;
+  }
+
+  .success-msg {
+    font-size: 1rem;
+  }
+  /* booking move section */
 }
 
 
@@ -1328,6 +1473,24 @@ h2 span {
   }
   /* movielist section */
 
+  /* booking movie section */
+  .admin-movie-form {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-movie-form button {
+    grid-column: span 1;
+  }
+
+  .booking-table th,
+  .booking-table td {
+    font-size: 0.95rem;
+    padding: 0.6rem;
+  }
+
+
+  /* booking move section */
+
 
   
 }
@@ -1348,6 +1511,17 @@ h2 span {
   }
 
   /* hero section */
+
+  /* booking move section */
+  .booking-container {
+    padding: 1.5rem;
+  }
+
+  .booking-container h2 {
+    font-size: 1.6rem;
+  }
+
+  /* booking move section */
 }
 
 
