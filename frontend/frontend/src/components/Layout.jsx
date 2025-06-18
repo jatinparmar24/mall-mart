@@ -1,16 +1,33 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Outlet, Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const Layout = () => {
   const navigate = useNavigate();
+  const [cartCount, setCartCount] = useState(0);
 
-  const user = JSON.parse(localStorage.getItem("user"));
+  const user = JSON.parse(localStorage.getItem("mallmartUser"));
   const isLoggedIn = !!user;
 
   const handleLogout = () => {
-    localStorage.removeItem("user");
+    localStorage.removeItem("mallmartUser");
     navigate("/login");
   };
+
+  useEffect(() => {
+  const fetchCartCount = async () => {
+    if (user?.username) {
+      try {
+        const res = await axios.get(`http://localhost:8000/api/cart/?user=${user.username}`);
+        setCartCount(res.data.length);
+      } catch (err) {
+        console.error("Failed to fetch cart count:", err);
+      }
+    }
+  };
+  fetchCartCount();
+}, [user]);
+
 
   return (
     <>
@@ -18,12 +35,16 @@ const Layout = () => {
         <div className="logo">Mall Mart</div>
         <nav className="nav-links">
           <Link to="/">Home</Link>
-          <Link to="/shopping">Shop</Link>
+          <Link to="/items">Shop</Link>
           <Link to="/movies">Movies</Link>
           <Link to="/games">Games</Link>
 
           {isLoggedIn ? (
             <>
+              <Link to="/cart">
+                Cart 🛒
+                {cartCount > 0 && <span className="cart-badge">{cartCount}</span>}
+              </Link>
               <span className="user-name">Hi, {user.username}</span>
               <button onClick={handleLogout} className="logout-btn">Logout</button>
             </>

@@ -22,3 +22,16 @@ class Purchase(models.Model):
 
     def __str__(self):
         return f"{self.user} - {self.item}"
+
+
+# for add to cart
+
+class Cart(models.Model):
+    user = models.CharField(max_length=100)
+    item = models.CharField(max_length=100)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    image = models.URLField(blank=True, null=True)
+    added_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user} - {self.item}"

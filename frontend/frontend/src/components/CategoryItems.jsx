@@ -1,6 +1,8 @@
 // src/components/CategoryItems.jsx
 import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
+
 
 const categoryData = {
   electronics: [
@@ -74,6 +76,30 @@ const CategoryItems = () => {
     });
   };
 
+  const handleAddToCart = async (item) => {
+  const userData = JSON.parse(localStorage.getItem("mallmartUser"));
+  if (!userData || !userData.username) {
+    return alert("Please login to add items to cart.");
+  }
+
+  const numericPrice = parseFloat(item.price.replace(/[₹,]/g, ""));
+  if (isNaN(numericPrice)) return alert("Invalid price format.");
+
+  try {
+    await axios.post("http://localhost:8000/api/cart/", {
+      user: userData.username,
+      item: item.name,
+      price: numericPrice,
+      image: item.image
+    });
+    alert("Item added to cart ✅");
+  } catch (err) {
+    alert("Failed to add to cart ❌");
+    console.error(err);
+  }
+};
+
+
   return (
     <div className="category-items">
       <h1>{category.toUpperCase()} 🛍️</h1>
@@ -84,6 +110,7 @@ const CategoryItems = () => {
             <h3>{item.name}</h3>
             <p>Price: {item.price}</p>
             <button onClick={() => handleBuyNow(item)}>Buy Now</button>
+            <button onClick={() => handleAddToCart(item)}>Add to Cart 🛒</button>
           </div>
         ))}
       </div>

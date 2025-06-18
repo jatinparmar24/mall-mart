@@ -4,9 +4,13 @@ import axios from "axios";
 
 const AdminDashboard = () => {
   const [purchases, setPurchases] = useState([]);
+  const [filteredPurchases, setFilteredPurchases] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(5); // show 5 purchases per page
+  const [itemsPerPage] = useState(10); 
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortOrder, setSortOrder] = useState("asc");
+
   const [newCategory, setNewCategory] = useState({
     name: "",
     desc: "",
@@ -18,6 +22,7 @@ const AdminDashboard = () => {
     axios.get("http://localhost:8000/api/purchases/")
       .then((res) => {
         setPurchases(res.data);
+        setFilteredPurchases(res.data);
         setLoading(false);
       })
       .catch((err) => {
@@ -40,24 +45,47 @@ const AdminDashboard = () => {
       .catch(() => alert("❌ Failed to add category"));
   };
 
-  // Pagination Logic
+  const handleSearch = (e) => {
+    const value = e.target.value.toLowerCase();
+    setSearchTerm(value);
+
+    const filtered = purchases.filter((p) =>
+      p.user.toLowerCase().includes(value)
+    );
+
+    setFilteredPurchases(filtered);
+    setCurrentPage(1);
+  };
+
+  const toggleSort = () => {
+    const sorted = [...filteredPurchases].sort((a, b) => {
+      if (sortOrder === "asc") {
+        return a.user.localeCompare(b.user);
+      } else {
+        return b.user.localeCompare(a.user);
+      }
+    });
+
+    setFilteredPurchases(sorted);
+    setSortOrder(sortOrder === "asc" ? "desc" : "asc");
+  };
+
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = purchases.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(purchases.length / itemsPerPage);
+  const currentItems = filteredPurchases.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(filteredPurchases.length / itemsPerPage);
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
 
   return (
-    <div className="admin-container">
-      <h1 className="admin-title">🚀 Admin Dashboard</h1>
+    <div className="admin-dashboard-wrapper">
+      <h1 className="admin-dashboard-title">🚀 Admin Dashboard</h1>
 
-      {/* Category Form */}
-      <div className="card form-card">
+      <div className="admin-dashboard-card">
         <h2>Add New Category</h2>
-        <form onSubmit={handleCategorySubmit}>
+        <form onSubmit={handleCategorySubmit} className="admin-dashboard-form">
           <input type="text" name="name" value={newCategory.name} placeholder="Category Name" onChange={handleInputChange} required />
           <input type="text" name="desc" value={newCategory.desc} placeholder="Description" onChange={handleInputChange} required />
           <input type="text" name="offer" value={newCategory.offer} placeholder="Offer (e.g., 50% Off)" onChange={handleInputChange} required />
@@ -66,13 +94,27 @@ const AdminDashboard = () => {
         </form>
       </div>
 
-      {/* Purchase Table */}
-      <div className="card table-card">
+      <div className="admin-dashboard-card">
         <h2>📊 Purchase History</h2>
-        {loading ? <p>Loading...</p> : (
+
+        <div className="admin-dashboard-search-sort">
+          <input
+            type="text"
+            placeholder="Search by User Name"
+            value={searchTerm}
+            onChange={handleSearch}
+          />
+          <button onClick={toggleSort}>
+            Sort by Name ({sortOrder === "asc" ? "Asc" : "Desc"})
+          </button>
+        </div>
+
+        {loading ? (
+          <p>Loading...</p>
+        ) : (
           <>
-            <div className="table-wrapper">
-              <table>
+            <div className="admin-dashboard-table-wrapper">
+              <table className="admin-dashboard-table">
                 <thead>
                   <tr>
                     <th>User</th>
@@ -84,18 +126,17 @@ const AdminDashboard = () => {
                 <tbody>
                   {currentItems.map((p, i) => (
                     <tr key={i}>
-                      <td data-label="User">{p.user}</td>
-                      <td data-label="Item">{p.item}</td>
-                      <td data-label="Price">₹{p.price}</td>
-                      <td data-label="Date">{new Date(p.date).toLocaleString()}</td>
+                      <td>{p.user}</td>
+                      <td>{p.item}</td>
+                      <td>₹{p.price}</td>
+                      <td>{new Date(p.date).toLocaleString()}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
 
-            {/* Pagination Controls */}
-            <div className="pagination">
+            <div className="admin-dashboard-pagination">
               {[...Array(totalPages)].map((_, index) => (
                 <button
                   key={index}

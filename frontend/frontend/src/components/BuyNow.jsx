@@ -15,28 +15,27 @@ const BuyNow = () => {
   }, [item, navigate]);
 
   const handleConfirmPurchase = async () => {
-    const user = localStorage.getItem("username"); // Replace with auth context if available
+  const userData = JSON.parse(localStorage.getItem("mallmartUser"));
 
-    if (!user) {
-      alert("You must be logged in to make a purchase.");
-      return;
-    }
+  if (!userData || !userData.username) {
+    alert("You must be logged in to make a purchase.");
+    return;
+  }
 
-    try {
-      const response = await axios.post("http://localhost:8000/api/purchases/", {
-        user: user,
-        item: item.name,
-        price: item.price
-      });
+  try {
+    await axios.post("http://localhost:8000/api/purchases/", {
+      user: userData.username,        
+      item: item.name,
+      price: Number(item.price),     
+    });
 
-
-      alert("Purchase successful!");
-      navigate("/items");
-    } catch (error) {
-      console.error("Purchase Error:", error);
-      alert("Purchase failed. Please try again.");
-    }
-  };
+    alert("Purchase successful!");
+    navigate("/items");
+  } catch (error) {
+    console.error("Purchase Error:", error.response?.data || error.message);
+    alert("Purchase failed. Please try again.");
+  }
+};
 
   if (!item) return null;
 

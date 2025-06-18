@@ -4,6 +4,9 @@ import { useNavigate } from "react-router-dom";
 const Items = () => {
   const navigate = useNavigate();
 
+  const ADMIN_EMAIL = "admin@email.com";
+  const ADMIN_PASSWORD = "admin";
+
   const categories = [
     { name: "Electronics", desc: "Smartphones, Laptops, and more", offer: "Up to 40% Off", img: "https://via.placeholder.com/300x200?text=Electronics" },
     { name: "Clothes", desc: "Fashion for all", offer: "Flat 50% Off", img: "https://via.placeholder.com/300x200?text=Clothes" },
@@ -22,7 +25,14 @@ const Items = () => {
   };
 
   const goToAdminDashboard = () => {
-    navigate("/Admindashboard");  // ✅ Ensure this matches App.jsx route
+    const user = JSON.parse(localStorage.getItem("mallmartUser")); // Assuming this is how you store user info
+
+    if (user && user.email === ADMIN_EMAIL) {
+      navigate("/Admindashboard");
+    } else {
+      alert("Access denied. Please login as admin.");
+      navigate("/login");
+    }
   };
 
   return (
@@ -45,6 +55,8 @@ const Items = () => {
             <p>{item.desc}</p>
             <span className="offer">{item.offer}</span>
             <button onClick={() => handleShop(item.name)}>Shop Now</button>
+            
+
           </div>
         ))}
       </div>

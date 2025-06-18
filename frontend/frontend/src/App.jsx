@@ -9,6 +9,8 @@ import Home from './components/Home';
 import CategoryItems from "./components/CategoryItems";
 import BuyNow from './components/BuyNow';
 import AdminDashboard from "./components/AdminDashboard";
+import Cart from './components/Cart';
+
 
 
 const App = () => {
@@ -21,6 +23,7 @@ const App = () => {
         <Route path="items" element={<Items />} />
         <Route path="items/:category" element={<CategoryItems />} />
         <Route path="/buy" element={<BuyNow />} />
+        <Route path="/cart" element={<Cart />} />
         <Route path="Admindashboard" element={<AdminDashboard />} /> 
       </Route>
     </Routes>
