@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import UserAccount,Purchase,Cart
+from .models import UserAccount,Purchase,Cart,Movie
 
 class UserAccountSerializer(serializers.ModelSerializer):
     class Meta:
@@ -20,3 +20,8 @@ class CartSerializer(serializers.ModelSerializer):
         model = Cart
         fields = '__all__'
 
+
+class MovieSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Movie
+        fields = '__all__'

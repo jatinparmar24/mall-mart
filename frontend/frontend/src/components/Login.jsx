@@ -14,20 +14,35 @@ const Login = () => {
     e.preventDefault();
     const { email, password } = formData;
 
-    // Check for admin credentials directly in frontend
+    // 🎯 Movie Admin credentials
+    if (email === "movieadmin@email.com" && password === "movie123") {
+      const movieAdminData = {
+        username: "Movie Admin",
+        email,
+        isAdmin: true,
+        role: "movieadmin",
+      };
+      localStorage.setItem("mallmartUser", JSON.stringify(movieAdminData));
+      alert("Movie admin login successful!");
+      navigate("/admin/movies");
+      return;
+    }
+
+    // 🛍️ Shopping Admin credentials
     if (email === "admin@email.com" && password === "admin") {
       const adminData = {
         username: "Admin",
         email,
         isAdmin: true,
+        role: "shoppingadmin",
       };
       localStorage.setItem("mallmartUser", JSON.stringify(adminData));
       alert("Admin login successful!");
       navigate("/Admindashboard");
-      return; // Skip backend call
+      return;
     }
 
-    // Normal user login
+    // 👤 Normal user login via backend
     try {
       const res = await axios.post("http://localhost:8000/login/", { email, password });
 
@@ -38,6 +53,7 @@ const Login = () => {
           username,
           email,
           isAdmin: false,
+          role: "user",
         };
 
         localStorage.setItem("mallmartUser", JSON.stringify(userData));

@@ -28,6 +28,7 @@ urlpatterns = [
     path('signup/', SignupView.as_view(), name='signup'),
     path('login/', LoginView.as_view(), name='login'),
     path('api/purchases/',purchase_list_create),
+    path('api/movies/', MovieListCreateView.as_view(), name='movie-list-create'),
     path('api/', include(router.urls)),
 
 

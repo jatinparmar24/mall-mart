@@ -1,9 +1,9 @@
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework import status,viewsets
-from .models import UserAccount,Purchase,Cart
-from .serializers import UserAccountSerializer,PurchaseSerializer,CartSerializer
+from rest_framework import status,viewsets,generics
+from .models import UserAccount,Purchase,Cart,Movie
+from .serializers import UserAccountSerializer,PurchaseSerializer,CartSerializer,MovieSerializer
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 import json
@@ -97,3 +97,8 @@ class CartViewSet(viewsets.ModelViewSet):
         if user:
             return Cart.objects.filter(user=user)
         return super().get_queryset()
+
+
+class MovieListCreateView(generics.ListCreateAPIView):
+    queryset = Movie.objects.all().order_by('-created_at')
+    serializer_class = MovieSerializer

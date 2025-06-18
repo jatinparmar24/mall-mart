@@ -10,6 +10,10 @@ import CategoryItems from "./components/CategoryItems";
 import BuyNow from './components/BuyNow';
 import AdminDashboard from "./components/AdminDashboard";
 import Cart from './components/Cart';
+import MovieList from './components/MovieList';
+import AdminAddMovie from './components/AdminAddMovie'; 
+import BookingPage from './components/BookingPage';
+
 
 
 
@@ -25,12 +29,12 @@ const App = () => {
         <Route path="/buy" element={<BuyNow />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="Admindashboard" element={<AdminDashboard />} /> 
+        <Route path="movies" element={<MovieList />} />
+        <Route path="admin/movies/add" element={<AdminAddMovie />} />
+        <Route path="/booking/:movieTitle" element={<BookingPage />} /> 
       </Route>
     </Routes>
   );
 };
 
 export default App;
-
-
-

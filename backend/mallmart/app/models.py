@@ -35,3 +35,19 @@ class Cart(models.Model):
 
     def __str__(self):
         return f"{self.user} - {self.item}"
+
+
+# for movie
+
+class Movie(models.Model):
+    title = models.CharField(max_length=255)
+    genre = models.CharField(max_length=100)
+    language = models.CharField(max_length=50)
+    duration = models.CharField(max_length=50)
+    show_time = models.CharField(max_length=100)
+    poster_url = models.URLField()
+    trailer_url = models.URLField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
