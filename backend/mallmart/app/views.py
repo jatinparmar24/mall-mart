@@ -2,8 +2,8 @@ from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status,viewsets,generics
-from .models import UserAccount,Purchase,Cart,Movie,MovieBooking
-from .serializers import UserAccountSerializer,PurchaseSerializer,CartSerializer,MovieSerializer,MovieBookingSerializer
+from .models import UserAccount,Purchase,Cart,Movie,MovieBooking,DiceGameScore
+from .serializers import UserAccountSerializer,PurchaseSerializer,CartSerializer,MovieSerializer,MovieBookingSerializer,DiceGameScoreSerializer
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 import json
@@ -124,3 +124,34 @@ class MovieBookingCreateView(generics.ListCreateAPIView):
 
         # Proceed if no duplicates
         return super().create(request, *args, **kwargs)
+
+
+
+
+
+# to save score who get point or win
+
+from .models import UserGameProfile
+from django.contrib.auth import get_user_model
+User = get_user_model()
+
+@api_view(["POST"])
+def save_dice_score(request):
+    serializer = DiceGameScoreSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+
+        # Win tracking logic
+        winner_name = serializer.validated_data.get("winner")
+        try:
+            user = User.objects.get(name=winner_name)  
+            profile, created = UserGameProfile.objects.get_or_create(user=user)
+            profile.total_wins += 1
+            if profile.total_wins >= 10:
+                profile.spin_unlocked = True
+            profile.save()
+        except User.DoesNotExist:
+            pass  
+
+        return Response({"message": "Score saved successfully!"})
+    return Response(serializer.errors, status=400)

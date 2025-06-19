@@ -30,7 +30,9 @@ urlpatterns = [
     path('api/purchases/',purchase_list_create),
     path('api/movies/', MovieListCreateView.as_view(), name='movie-list-create'),
     path('api/', include(router.urls)),
-    path('api/bookings/', MovieBookingCreateView.as_view(), name='movie-booking')
+    path('api/bookings/', MovieBookingCreateView.as_view(), name='movie-booking'),
+    path('api/games/dice/save/', save_dice_score, name='save_dice_score'),
+
 
 
 ]

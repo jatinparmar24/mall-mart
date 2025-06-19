@@ -37,7 +37,7 @@ const Layout = () => {
           <Link to="/">Home</Link>
           <Link to="/items">Shop</Link>
           <Link to="/movies">Movies</Link>
-          <Link to="/games">Games</Link>
+          <Link to="/gamelist">Games</Link>
 
           {isLoggedIn ? (
             <>

@@ -69,3 +69,29 @@ class MovieBooking(models.Model):
     def __str__(self):
         return f"{self.movie_title} - {self.email}"
 
+
+
+class DiceGameScore(models.Model):
+    player1 = models.CharField(max_length=100)
+    player2 = models.CharField(max_length=100)
+    score1 = models.IntegerField()
+    score2 = models.IntegerField()
+    winner = models.CharField(max_length=100)
+    date_played = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.winner} won Dice Game on {self.date_played.strftime('%Y-%m-%d')}"
+
+
+
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
+class UserGameProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    total_wins = models.IntegerField(default=0)
+    spin_unlocked = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.user.username} - Wins: {self.total_wins} - Spin: {'Yes' if self.spin_unlocked else 'No'}"

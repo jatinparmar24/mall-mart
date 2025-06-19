@@ -13,6 +13,9 @@ import Cart from './components/Cart';
 import MovieList from './components/MovieList';
 import AdminAddMovie from './components/AdminAddMovie'; 
 import BookingPage from './components/BookingPage';
+import GamesList from './components/GameList';
+import DiceGame from './components/DiceGame';
+
 
 
 
@@ -32,6 +35,9 @@ const App = () => {
         <Route path="movies" element={<MovieList />} />
         <Route path="admin/movies/add" element={<AdminAddMovie />} />
         <Route path="/booking/:movieTitle" element={<BookingPage />} /> 
+        <Route path="/gamelist" element={<GamesList/>}/>
+        <Route path="/games/dice" element={<DiceGame />} />
+
       </Route>
     </Routes>
   );

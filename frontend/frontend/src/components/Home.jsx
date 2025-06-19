@@ -2,6 +2,8 @@ import React from 'react';
 import Hero from './Hero';
 import Shopping from './Shopping';
 import MovieSection from './MovieSection';
+import GameSection from './GameSection';
+
 
 
 const Home = () => {
@@ -10,6 +12,7 @@ const Home = () => {
       <Hero />
       <Shopping />
       <MovieSection />
+      <GameSection />
     </>
   );
 };
