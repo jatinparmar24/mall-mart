@@ -15,6 +15,12 @@ import AdminAddMovie from './components/AdminAddMovie';
 import BookingPage from './components/BookingPage';
 import GamesList from './components/GameList';
 import DiceGame from './components/DiceGame';
+import TicTacToe from './components/TicTacToe';
+import GuessNumber from './components/GuessNumber';
+import QuizCompetition from './components/QuizCompetition';
+
+
+
 
 
 
@@ -37,6 +43,9 @@ const App = () => {
         <Route path="/booking/:movieTitle" element={<BookingPage />} /> 
         <Route path="/gamelist" element={<GamesList/>}/>
         <Route path="/games/dice" element={<DiceGame />} />
+        <Route path="/games/tictactoe" element={<TicTacToe />} />
+        <Route path="/games/guess" element={<GuessNumber />} />
+        <Route path="/games/quiz" element={<QuizCompetition />} />
 
       </Route>
     </Routes>

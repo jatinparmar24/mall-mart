@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import UserAccount,Purchase,Cart,Movie,MovieBooking,DiceGameScore
+from .models import UserAccount,Purchase,Cart,Movie,MovieBooking,DiceGameScore,TicTacToeScore,QuizQuestion,GuessNumberScore
 
 class UserAccountSerializer(serializers.ModelSerializer):
     class Meta:
@@ -40,3 +40,22 @@ class DiceGameScoreSerializer(serializers.ModelSerializer):
     class Meta:
         model = DiceGameScore
         fields = "__all__"
+
+
+class TicTacToeScoreSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TicTacToeScore
+        fields = '__all__'
+
+
+class GuessNumberScoreSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GuessNumberScore
+        fields = '__all__'
+
+
+
+class QuizQuestionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = QuizQuestion
+        fields = ['id', 'question', 'options']

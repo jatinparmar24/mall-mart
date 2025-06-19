@@ -3,7 +3,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status,viewsets,generics
 from .models import UserAccount,Purchase,Cart,Movie,MovieBooking,DiceGameScore
-from .serializers import UserAccountSerializer,PurchaseSerializer,CartSerializer,MovieSerializer,MovieBookingSerializer,DiceGameScoreSerializer
+from .serializers import UserAccountSerializer,PurchaseSerializer,CartSerializer,MovieSerializer,MovieBookingSerializer,DiceGameScoreSerializer,TicTacToeScoreSerializer,QuizQuestionSerializer,GuessNumberScoreSerializer
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 import json
@@ -132,8 +132,6 @@ class MovieBookingCreateView(generics.ListCreateAPIView):
 # to save score who get point or win
 
 from .models import UserGameProfile
-from django.contrib.auth import get_user_model
-User = get_user_model()
 
 @api_view(["POST"])
 def save_dice_score(request):
@@ -144,14 +142,107 @@ def save_dice_score(request):
         # Win tracking logic
         winner_name = serializer.validated_data.get("winner")
         try:
-            user = User.objects.get(name=winner_name)  
+            user = UserAccount.objects.get(username=winner_name)  # ✅ Fixed here
             profile, created = UserGameProfile.objects.get_or_create(user=user)
             profile.total_wins += 1
             if profile.total_wins >= 10:
                 profile.spin_unlocked = True
             profile.save()
-        except User.DoesNotExist:
-            pass  
+        except UserAccount.DoesNotExist:
+            pass  # You can log or handle this gracefully
 
         return Response({"message": "Score saved successfully!"})
+    
     return Response(serializer.errors, status=400)
+
+
+@api_view(["POST"])
+def save_tictactoe_score(request):
+    serializer = TicTacToeScoreSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+
+        player_name = serializer.validated_data.get("player")
+        result = serializer.validated_data.get("result")
+
+        if result == "win":
+            try:
+                user = UserAccount.objects.filter(username=player_name).first()
+                if user:
+                    profile, _ = UserGameProfile.objects.get_or_create(user=user)
+                    profile.total_wins += 1
+                    if profile.total_wins >= 10:
+                        profile.spin_unlocked = True
+                    profile.save()
+            except Exception as e:
+                print("Error updating win profile:", e)
+
+        return Response({"message": "Score saved!"})
+    return Response(serializer.errors, status=400)
+
+
+
+# for guess number
+@api_view(["POST"])
+def save_guess_score(request):
+    serializer = GuessNumberScoreSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+
+        # Only track win
+        if serializer.validated_data.get("result") == "win":
+            player_name = serializer.validated_data.get("player")
+            try:
+                user = UserAccount.objects.filter(username=player_name).first()
+                if user:
+                    profile, _ = UserGameProfile.objects.get_or_create(user=user)
+                    profile.total_wins += 1
+                    if profile.total_wins >= 10:
+                        profile.spin_unlocked = True
+                    profile.save()
+            except Exception as e:
+                print("Error updating profile:", e)
+
+        return Response({"message": "Score saved!"})
+    
+    return Response(serializer.errors, status=400)
+
+
+# for quiz question
+
+
+from .models import QuizQuestion, UserGameProfile
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
+
+@api_view(['GET'])
+def get_quiz_questions(request):
+    questions = QuizQuestion.objects.all()[:5]  # Send 5 questions
+    serializer = QuizQuestionSerializer(questions, many=True)
+    return Response(serializer.data)
+
+@api_view(['POST'])
+def check_quiz_answer(request):
+    try:
+        question_id = request.data.get('question_id')
+        selected_option = request.data.get('selected_option')
+
+        if not question_id or not selected_option:
+            return Response({'error': 'Missing data'}, status=400)
+
+        question = QuizQuestion.objects.get(id=question_id)
+
+        if question.answer.strip().lower() == selected_option.strip().lower():
+            return Response({'correct': True})
+        else:
+            return Response({'correct': False})
+    except QuizQuestion.DoesNotExist:
+        return Response({'error': 'Question not found'}, status=404)
+    except Exception as e:
+        return Response({'error': str(e)}, status=500)
+
+
+
+

@@ -1572,7 +1572,221 @@
 
 
 
+/* tictactoe  section */
+.tic-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  color: #ffffff;
+  font-family: "Segoe UI", sans-serif;
+}
 
+.tic-container h2 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  color: #00f7ff;
+  text-shadow: 1px 1px 4px rgba(0, 255, 255, 0.4);
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(3, 100px);
+  grid-gap: 15px;
+  margin-bottom: 30px;
+}
+
+.cell {
+  width: 100px;
+  height: 100px;
+  background: #ffffff22;
+  color: #fff;
+  font-size: 2.5rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #00f7ff;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+  box-shadow: 0 4px 8px rgba(0, 255, 255, 0.3);
+}
+
+.cell:hover {
+  background: #00f7ff33;
+  transform: scale(1.05);
+}
+
+.result {
+  font-size: 1.4rem;
+  margin-bottom: 20px;
+  background: #ffffff22;
+  padding: 12px 24px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
+}
+
+.result button {
+  margin-top: 12px;
+  padding: 8px 18px;
+  font-size: 1rem;
+  background-color: #00f7ff;
+  color: #000;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.result button:hover {
+  background-color: #00c0cc;
+}
+
+.back-button {
+  margin-top: 25px;
+  padding: 10px 20px;
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  font-size: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 3px 10px rgba(255, 77, 77, 0.5);
+  transition: background 0.3s;
+}
+
+.back-button:hover {
+  background-color: #e60000;
+}
+
+/* tictactoe  section */
+
+
+/* guess the number */
+.guess-section {
+  text-align: center;
+  padding: 40px 20px;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #3a1c71, #d76d77, #ffaf7b);
+  color: #fff;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.guess-section h2 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+.guess-section p {
+  font-size: 1.1rem;
+}
+
+.guess-section input {
+  padding: 10px;
+  width: 200px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 6px;
+  margin-top: 15px;
+  margin-right: 10px;
+}
+
+.guess-section .guess-button,
+.guess-section .play-again,
+.guess-section .back-button {
+  padding: 10px 16px;
+  margin-top: 15px;
+  border: none;
+  border-radius: 6px;
+  background-color: #fff;
+  color: #333;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.guess-section .guess-button:hover,
+.guess-section .play-again:hover,
+.guess-section .back-button:hover {
+  background-color: #f0f0f0;
+}
+
+.guess-section .message {
+  font-size: 1.3rem;
+  margin-top: 20px;
+}
+
+.guess-section .play-again {
+  background-color: #00e676;
+  color: white;
+}
+
+.guess-section .back-button {
+  background-color: #ff3d00;
+  color: white;
+  margin-top: 25px;
+}
+
+/* guess the number */
+
+
+
+/* quizcompetition */
+.quiz-section {
+  max-width: 700px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 2rem;
+}
+
+.question-box {
+  background: #f9f9f9;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  gap: 10px;
+  margin: 1rem 0;
+}
+
+.option {
+  background: #eee;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  transition: 0.3s ease;
+}
+
+.option.selected {
+  background: #c4f1c4;
+}
+
+.submit-button, .back-button {
+  margin-top: 1rem;
+  padding: 0.5rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background-color: #3b82f6;
+  color: white;
+  font-weight: bold;
+}
+
+.submit-button:hover, .back-button:hover {
+  background-color: #2563eb;
+}
+
+/* quizcompetition */
 
 
 
@@ -1645,6 +1859,56 @@
     width: 80%;
   }
   /* dice game */
+
+  /* tictactoe */
+    .tic-container {
+    padding: 20px 10px;
+  }
+
+  .tic-container h2 {
+    font-size: 2rem;
+    text-align: center;
+  }
+
+  .board {
+    grid-template-columns: repeat(3, 70px);
+    grid-gap: 10px;
+  }
+
+  .cell {
+    width: 70px;
+    height: 70px;
+    font-size: 2rem;
+  }
+
+  .result {
+    font-size: 1.2rem;
+    padding: 10px 18px;
+  }
+
+  .result button,
+  .back-button {
+    font-size: 0.9rem;
+    padding: 8px 16px;
+  }
+
+  /* tictactoe */
+
+
+  /* guessnumber */
+  .guess-section input {
+    width: 160px;
+  }
+
+  .guess-section h2 {
+    font-size: 2rem;
+  }
+
+  .guess-section .message {
+    font-size: 1.1rem;
+  }
+
+  /* guessnumber */
 }
 
 
