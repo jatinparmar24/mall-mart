@@ -7,7 +7,7 @@ const DiceGame = () => {
   const [playerScore, setPlayerScore] = useState(0);
   const [computerScore, setComputerScore] = useState(0);
   const [round, setRound] = useState(1);
-  const [turn, setTurn] = useState("player"); // "player" or "computer"
+  const [turn, setTurn] = useState("player");
   const [playerRoll, setPlayerRoll] = useState(null);
   const [computerRoll, setComputerRoll] = useState(null);
   const [message, setMessage] = useState("");
@@ -17,11 +17,22 @@ const DiceGame = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("mallmartUser"));
-    if (user) setPlayerName(user.name);
-  }, []);
+  const user = JSON.parse(localStorage.getItem("mallmartUser"));
+  let name = "";
 
-  
+  if (user) {
+    if (typeof user.username === "string") {
+      name = user.username.trim();
+    } else if (Array.isArray(user.username) && typeof user.username[0] === "string") {
+      name = user.username[0].trim();
+    }
+  }
+
+  if (!name) name = "Unknown Player";
+
+  setPlayerName(name);
+}, []);
+
 
   const rollDice = () => Math.floor(Math.random() * 6) + 1;
 
@@ -55,19 +66,34 @@ const DiceGame = () => {
   };
 
   const declareResult = async () => {
-    if (playerScore > computerScore) {
-      setMessage("🏆 You Win! Score Saved to Leaderboard.");
-      await axios.post("http://localhost:8000/api/games/dice/save/", {
-        player1: playerName,
-        player2: "Computer",
-        score1: playerScore,
-        score2: computerScore,
-        winner: playerName
-      });
-    } else if (computerScore > playerScore) {
-      setMessage("😞 You Lose! Try Again.");
-    } else {
-      setMessage("⚖️ It's a Draw! Play Again?");
+    const winner = playerScore > computerScore ? playerName : computerScore > playerScore ? "Computer" : "Draw";
+
+    try {
+      if (winner === playerName) {
+        const scoreData = {
+          player1: playerName,
+          player2: "Computer",
+          score1: playerScore,
+          score2: computerScore,
+          winner: playerName
+        };
+
+        console.log("Posting to backend:", scoreData);
+        console.log("Types:", {
+          player1: typeof playerName,
+          winner: typeof playerName
+        });
+
+        await axios.post("http://localhost:8000/api/games/dice/save/", scoreData);
+        setMessage("🏆 You Win! Score Saved to Leaderboard.");
+      } else if (winner === "Computer") {
+        setMessage("😞 You Lose! Try Again.");
+      } else {
+        setMessage("⚖️ It's a Draw! Play Again?");
+      }
+    } catch (error) {
+      console.error("Failed to save score:", error.response?.data || error.message);
+      setMessage("⚠️ Failed to save score. Please try again.");
     }
   };
 
@@ -82,7 +108,8 @@ const DiceGame = () => {
     setLoading(false);
   };
 
-  const getDiceImage = (roll) => roll ? `/images/dice-${roll}.png` : "/images/dice-empty.png";
+  const getDiceImage = (roll) =>
+    roll ? `/images/dice-${roll}.png` : "/images/dice-empty.png";
 
   return (
     <div className="dice-game-container">
@@ -98,7 +125,7 @@ const DiceGame = () => {
 
       <div className="dice-players">
         <div className={`player-card ${turn === "player" && !message ? "glow" : ""}`}>
-          <h3>{playerName || "You"}</h3>
+          <h3>{playerName}</h3>
           <img src={getDiceImage(playerRoll)} alt="Player Dice" className={loading ? "dim" : ""} />
           <p>Rolled: {playerRoll ?? "-"}</p>
           <p>Total Score: {playerScore}</p>

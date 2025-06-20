@@ -18,6 +18,8 @@ import DiceGame from './components/DiceGame';
 import TicTacToe from './components/TicTacToe';
 import GuessNumber from './components/GuessNumber';
 import QuizCompetition from './components/QuizCompetition';
+import LeaderDashboard from './components/Leaderdashboard';
+
 
 
 
@@ -46,6 +48,7 @@ const App = () => {
         <Route path="/games/tictactoe" element={<TicTacToe />} />
         <Route path="/games/guess" element={<GuessNumber />} />
         <Route path="/games/quiz" element={<QuizCompetition />} />
+        <Route path="/leaderboard" element={<LeaderDashboard />} />
 
       </Route>
     </Routes>

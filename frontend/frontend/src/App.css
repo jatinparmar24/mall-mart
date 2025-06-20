@@ -1475,6 +1475,29 @@
   background: #00e6b8;
 }
 
+.games-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1rem;
+}
+
+.leaderboard-btn {
+  background-color: #ffd700;
+  color: #000;
+  font-weight: bold;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.leaderboard-btn:hover {
+  background-color: #ffc300;
+}
+
+
 /* GameList section */
 
 
@@ -1788,6 +1811,87 @@
 
 /* quizcompetition */
 
+
+/* leaderboard for games */
+.leader-dashboard-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 10px;
+}
+
+.leader-dashboard-table thead {
+  background-color: #333;
+  color: white;
+}
+
+.leader-dashboard-table td,
+.leader-dashboard-table th {
+  padding: 8px;
+  text-align: center;
+  border: 1px solid #ddd;
+}
+
+.leader-dashboard-gold {
+  background-color: gold;
+  font-weight: bold;
+}
+
+.leader-dashboard-silver {
+  background-color: silver;
+  font-weight: bold;
+}
+
+.leader-dashboard-bronze {
+  background-color: #cd7f32;
+  font-weight: bold;
+}
+
+.leader-dashboard-pagination {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.leader-dashboard-pagination button {
+  margin: 2px;
+  padding: 5px 10px;
+  border: none;
+  background-color: #eee;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.leader-dashboard-active {
+  background-color: #007bff;
+  color: white;
+}
+
+.leader-dashboard-wheel {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.leader-dashboard-spin-result {
+  margin-top: 10px;
+  font-weight: bold;
+  color: green;
+}
+
+.leader-dashboard-wheel-graphic {
+  font-size: 48px;
+  margin: 10px 0;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(1440deg); } 
+}
+
+.wheel-spinning {
+  animation: spin 2s ease-out forwards;
+  display: inline-block;
+}
+
+/* leaderboard for games */
 
 
 /* media query */

@@ -45,9 +45,24 @@ const GamesList = () => {
     }
   };
 
+  const handleLeaderDashboard = () => {
+    const user = JSON.parse(localStorage.getItem("mallmartUser"));
+    if (!user) {
+      alert("Please log in to view the Leader Dashboard!");
+      navigate("/login");
+    } else {
+      navigate("/leaderboard");
+    }
+  };
+
   return (
     <div className="games-list-container">
-      <h1>🎮 Choose a Game to Play</h1>
+      <div className="games-header">
+        <h1>🎮 Choose a Game to Play</h1>
+        <button className="leaderboard-btn" onClick={handleLeaderDashboard}>
+          🏆 Leader Dashboard
+        </button>
+      </div>
       <div className="games-grid">
         {games.map((game) => (
           <div className="game-card" key={game.id}>

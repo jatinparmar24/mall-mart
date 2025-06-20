@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status,viewsets,generics
-from .models import UserAccount,Purchase,Cart,Movie,MovieBooking,DiceGameScore
+from .models import UserAccount,Purchase,Cart,Movie,MovieBooking,DiceGameScore,TicTacToeScore,GuessNumberScore
 from .serializers import UserAccountSerializer,PurchaseSerializer,CartSerializer,MovieSerializer,MovieBookingSerializer,DiceGameScoreSerializer,TicTacToeScoreSerializer,QuizQuestionSerializer,GuessNumberScoreSerializer
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
@@ -86,6 +86,27 @@ def purchase_list_create(request):
             serializer.save()
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
+    
+
+# for razor pay
+@api_view(['POST'])
+def create_razorpay_order(request):
+    import razorpay
+    from django.conf import settings
+
+    amount = int(request.data.get("amount", 0)) * 100  # ₹ to paise
+    client = razorpay.Client(auth=("rzp_test_pr99iascS1WRtU" , "UTDIzPGwICnAssu3Q3lk7zUi"))
+
+    try:
+        order = client.order.create({
+            "amount": amount,
+            "currency": "INR",
+            "payment_capture": 1
+        })
+        return Response(order)
+    except Exception as e:
+        return Response({"error": str(e)}, status=400)
+
 
 
 class CartViewSet(viewsets.ModelViewSet):
@@ -97,6 +118,14 @@ class CartViewSet(viewsets.ModelViewSet):
         if user:
             return Cart.objects.filter(user=user)
         return super().get_queryset()
+
+@api_view(['DELETE'])
+def clear_cart(request):
+    user = request.query_params.get('user')
+    if user:
+        Cart.objects.filter(user=user).delete()
+        return Response({"message": "Cart cleared."})
+    return Response({"error": "User not specified"}, status=400)
 
 
 # for movie
@@ -133,27 +162,30 @@ class MovieBookingCreateView(generics.ListCreateAPIView):
 
 from .models import UserGameProfile
 
-@api_view(["POST"])
+@api_view(['POST'])
 def save_dice_score(request):
     serializer = DiceGameScoreSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
 
-        # Win tracking logic
+        # ✅ Track win for the winner
         winner_name = serializer.validated_data.get("winner")
         try:
-            user = UserAccount.objects.get(username=winner_name)  # ✅ Fixed here
-            profile, created = UserGameProfile.objects.get_or_create(user=user)
-            profile.total_wins += 1
-            if profile.total_wins >= 10:
-                profile.spin_unlocked = True
-            profile.save()
-        except UserAccount.DoesNotExist:
-            pass  # You can log or handle this gracefully
+            user = UserAccount.objects.filter(username=winner_name).first()
+            if user:
+                profile, _ = UserGameProfile.objects.get_or_create(user=user)
+                profile.total_wins += 1
+                if profile.total_wins >= 10:
+                    profile.spin_unlocked = True
+                profile.save()
+        except Exception as e:
+            print("Error updating dice win profile:", e)
 
-        return Response({"message": "Score saved successfully!"})
-    
+        return Response({"message": "Score saved successfully"}, status=201)
+
     return Response(serializer.errors, status=400)
+
+
 
 
 @api_view(["POST"])
@@ -244,5 +276,65 @@ def check_quiz_answer(request):
         return Response({'error': str(e)}, status=500)
 
 
+
+# for leader dashboard
+
+
+@api_view(['GET'])
+def leaderboard_view(request):
+    dice_scores = DiceGameScore.objects.all().order_by('-date_played')
+    ttt_scores = TicTacToeScore.objects.all().order_by('-date_played')
+    guess_scores = GuessNumberScore.objects.all().order_by('-date_played')
+
+    return Response({
+        "dice": [
+            {
+                "player1": d.player1,
+                "player2": d.player2,
+                "score1": d.score1,
+                "score2": d.score2,
+                "winner": d.winner,
+                "date": d.date_played
+            } for d in dice_scores
+        ],
+        "tictactoe": [
+            {
+                "player": t.player,
+                "result": t.result,
+                "date": t.date_played
+            } for t in ttt_scores
+        ],
+        "guess": [
+            {
+                "player": g.player,
+                "result": g.result,
+                "date": g.date_played
+            } for g in guess_scores
+        ]
+    })
+
+
+
+@api_view(['GET'])
+def user_profile(request, username):
+    user = UserAccount.objects.filter(username=username).first()
+    profile = UserGameProfile.objects.get(user=user)
+    return Response({
+        "username": user.username,
+        "total_wins": profile.total_wins,
+        "spin_unlocked": profile.spin_unlocked
+    })
+
+
+@api_view(["POST"])
+def lock_spin(request, username):
+    try:
+        user = UserAccount.objects.get(username=username)
+        profile = UserGameProfile.objects.get(user=user)
+        profile.spin_unlocked = False
+        profile.save()
+        return Response({"message": "Spin locked!"})
+    except Exception as e:
+        return Response({"error": str(e)}, status=400)
 
 

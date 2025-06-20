@@ -120,6 +120,9 @@ CORS_ALLOW_HEADERS = (
 )
 
 
+RAZORPAY_KEY_ID = "rzp_test_pr99iascS1WRtU" 
+RAZORPAY_KEY_SECRET = "UTDIzPGwICnAssu3Q3lk7zUi"
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators

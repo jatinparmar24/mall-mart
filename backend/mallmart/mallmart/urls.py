@@ -28,14 +28,20 @@ urlpatterns = [
     path('signup/', SignupView.as_view(), name='signup'),
     path('login/', LoginView.as_view(), name='login'),
     path('api/purchases/', purchase_list_create),
-    path('api/movies/', MovieListCreateView.as_view(), name='movie-list-create'),
     path('api/', include(router.urls)),
+    path('api/cart-clear/', clear_cart),
+    path('api/movies/', MovieListCreateView.as_view(), name='movie-list-create'),
     path('api/bookings/', MovieBookingCreateView.as_view(), name='movie-booking'),
     path('api/games/dice/save/', save_dice_score, name='save_dice_score'),
     path("api/save-tictactoe-score/", save_tictactoe_score),
     path("api/save-guess-score/", save_guess_score, name="save_guess_score"),
     path('api/get-quiz-questions/', get_quiz_questions), 
-    path('api/check-quiz-answer/', check_quiz_answer),    
+    path('api/check-quiz-answer/', check_quiz_answer),  
+    path('api/leaderboard/', leaderboard_view),
+    path('api/user-profile/<str:username>/', user_profile),
+    path('api/lock-spin/<str:username>/', lock_spin),
+    path('api/create-razorpay-order/', create_razorpay_order),
+
     
 
 
