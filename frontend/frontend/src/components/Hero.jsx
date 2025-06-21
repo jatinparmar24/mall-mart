@@ -12,15 +12,15 @@ const Hero = () => {
 
           <div className="hero-gallery">
             <div className="hero-box">
-              <img src="https://images.unsplash.com/photo-1542838686-9f5cf24867c6?auto=format&fit=crop&w=800&q=80" alt="Shopping" />
+              <img src="/hero_shopping.jpg" alt="Shopping" />
               <span>Shopping</span>
             </div>
             <div className="hero-box">
-              <img src="https://images.unsplash.com/photo-1534452203293-494d7ddbf7e0?auto=format&fit=crop&w=800&q=80" alt="Movies" />
+              <img src="/hero_movie.jpg" alt="Movies" />
               <span>Movies</span>
             </div>
             <div className="hero-box">
-              <img src="https://images.unsplash.com/photo-1598550487032-fbc9c184f4c2?auto=format&fit=crop&w=800&q=80" alt="Games" />
+              <img src="/games_hero.jpg" alt="Games" />
               <span>Games</span>
             </div>
           </div>

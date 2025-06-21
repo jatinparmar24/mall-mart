@@ -9,15 +9,15 @@ const movies = [
     duration: "2h 15m",
     language: "English",
     time: "7:30 PM",
-    image: "https://i.imgur.com/PkGZ6cz.jpg"
+    image: "/deadpool.jpg"
   },
   {
-    title: "Inside Out 2",
-    genre: "Animation | Family",
-    duration: "1h 50m",
-    language: "English",
+    title: "R R R",
+    genre: "Action",
+    duration: "3h 20m",
+    language: "Hindi",
     time: "5:00 PM",
-    image: "https://i.imgur.com/kAr0DEr.jpg"
+    image: "/rrr.jpg"
   },
   {
     title: "Kalki 2898 AD",
@@ -25,7 +25,7 @@ const movies = [
     duration: "2h 50m",
     language: "Hindi",
     time: "9:00 PM",
-    image: "https://i.imgur.com/M2zICfi.jpg"
+    image: "/kalki.jpg"
   },
 ];
 

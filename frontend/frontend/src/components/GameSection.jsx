@@ -26,17 +26,17 @@ const GameSection = () => {
           </ul>
           <div className="gamezone-cards">
             <div className="game-card">
-              <img src="/images/tic-tac-toe.png" alt="Tic Tac Toe" />
+              <img src="https://cdn-icons-png.flaticon.com/512/3075/3075977.png" alt="Tic Tac Toe" />
               <h3>Tic Tac Toe</h3>
               <p>Classic Xs and Os. Outsmart your opponent!</p>
             </div>
             <div className="game-card">
-              <img src="/images/dice-game.png" alt="Dice Game" />
+              <img src="https://cdn-icons-png.flaticon.com/512/3075/3075977.png" alt="Dice Game" />
               <h3>Dice Roll Duel</h3>
               <p>Roll the dice and beat your opponent to score!</p>
             </div>
             <div className="game-card">
-              <img src="/images/guess-number.png" alt="Guess the Number" />
+              <img src="https://cdn-icons-png.flaticon.com/512/3075/3075977.png" alt="Guess the Number" />
               <h3>Guess the Number</h3>
               <p>Can you guess the secret number in limited tries?</p>
             </div>

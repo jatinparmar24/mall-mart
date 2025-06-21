@@ -8,16 +8,16 @@ const Items = () => {
   const ADMIN_PASSWORD = "admin";
 
   const categories = [
-    { name: "Electronics", desc: "Smartphones, Laptops, and more", offer: "Up to 40% Off", img: "https://via.placeholder.com/300x200?text=Electronics" },
-    { name: "Clothes", desc: "Fashion for all", offer: "Flat 50% Off", img: "https://via.placeholder.com/300x200?text=Clothes" },
-    { name: "Accessories", desc: "Bags, watches, jewelry", offer: "Buy 1 Get 1", img: "https://via.placeholder.com/300x200?text=Accessories" },
-    { name: "Fruits", desc: "Fresh and organic", offer: "Fresh Picks", img: "https://via.placeholder.com/300x200?text=Fruits" },
-    { name: "Hardware", desc: "Tools and more", offer: "Up to 25% Off", img: "https://via.placeholder.com/300x200?text=Hardware" },
-    { name: "Shoes", desc: "Comfort & Style", offer: "Mega Sale", img: "https://via.placeholder.com/300x200?text=Shoes" },
-    { name: "Cosmetics", desc: "Top brands for glow", offer: "Beauty Bonanza", img: "https://via.placeholder.com/300x200?text=Cosmetics" },
-    { name: "Books", desc: "Best reads", offer: "Flat 30% Off", img: "https://via.placeholder.com/300x200?text=Books" },
-    { name: "Toys", desc: "Fun for all ages", offer: "Toy Carnival", img: "https://via.placeholder.com/300x200?text=Toys" },
-    { name: "Stationery", desc: "School & Office", offer: "Up to 50% Off", img: "https://via.placeholder.com/300x200?text=Stationery" }
+    { name: "Electronics", desc: "Smartphones, Laptops, and more", offer: "Up to 40% Off", img: "/electronic_item.jpg" },
+    { name: "Clothes", desc: "Fashion for all", offer: "Flat 50% Off", img: "/clothes_item.jpg" },
+    { name: "Accessories", desc: "Bags, watches, jewelry", offer: "Buy 1 Get 1", img: "/acc_items.jpeg" },
+    { name: "Fruits", desc: "Fresh and organic", offer: "Fresh Picks", img: "/fruits_item.jpg" },
+    { name: "Hardware", desc: "Tools and more", offer: "Up to 25% Off", img: "/hardware_item.jpg" },
+    { name: "Shoes", desc: "Comfort & Style", offer: "Mega Sale", img: "/shoes_item.jpg" },
+    { name: "Cosmetics", desc: "Top brands for glow", offer: "Beauty Bonanza", img: "/cosmetics_item.jpg" },
+    { name: "Books", desc: "Best reads", offer: "Flat 30% Off", img: "/books_item.jpg" },
+    { name: "Toys", desc: "Fun for all ages", offer: "Toy Carnival", img: "/toys_item.jpg" },
+    { name: "Stationery", desc: "School & Office", offer: "Up to 50% Off", img: "/stationary_item.jpg" }
   ];
 
   const handleShop = (category) => {

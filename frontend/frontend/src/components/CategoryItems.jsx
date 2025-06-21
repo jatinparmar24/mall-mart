@@ -6,12 +6,12 @@ import axios from "axios";
 
 const categoryData = {
   electronics: [
-    { name: "Smartphone", price: "₹29,999", image: "https://via.placeholder.com/300x200?text=Smartphone" },
-    { name: "Laptop", price: "₹59,999", image: "https://via.placeholder.com/300x200?text=Laptop" },
+    { name: "Smartphone", price: "₹29,999", image: "/phone.jpg" },
+    { name: "Laptop", price: "₹59,999", image: "/laptop_cv.jpg" },
   ],
   clothes: [
     { name: "T-Shirt", price: "₹799", image: "https://via.placeholder.com/300x200?text=T-Shirt" },
-    { name: "Jeans", price: "₹1,499", image: "https://via.placeholder.com/300x200?text=Jeans" },
+    { name: "Jeans", price: "₹1,499", image: "/jeans.jpg" },
   ],
   accessories: [
     { name: "Watch", price: "₹2,999", image: "https://via.placeholder.com/300x200?text=Watch" },
