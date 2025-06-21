@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-
+import { motion } from 'framer-motion';
 
 const movies = [
   {
@@ -34,10 +34,32 @@ const MovieSection = () => {
 
   return (
     <section className="movie-theater-section">
-      <h2 className="section-title">🎬 Now Showing</h2>
-      <div className="movie-theater-grid">
+      <motion.h2
+        className="section-title"
+        initial={{ opacity: 0, y: -30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1 }}
+        viewport={{ once: true, amount: 0.3 }}
+      >
+        🎬 Now Showing
+      </motion.h2>
+
+      <motion.div
+        className="movie-theater-grid"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.3 }}
+        transition={{ staggerChildren: 0.3 }}
+      >
         {movies.map((movie, index) => (
-          <div className="movie-theater-card" key={index}>
+          <motion.div
+            className="movie-theater-card"
+            key={index}
+            initial={{ opacity: 0, scale: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, delay: index * 0.2 }}
+            viewport={{ once: true, amount: 0.3 }}
+          >
             <img src={movie.image} alt={movie.title} className="movie-poster" />
             <div className="movie-info">
               <h3>{movie.title}</h3>
@@ -45,10 +67,22 @@ const MovieSection = () => {
               <p className="meta">🕘 {movie.duration} | 🎞️ {movie.language}</p>
               <span className="badge">🎟️ {movie.time}</span>
             </div>
-          </div>
+          </motion.div>
         ))}
-      </div>
-      <button className="theater-btn" onClick={() => navigate('/movies')}>Explore All Movies</button>
+      </motion.div>
+
+      <motion.button
+        className="theater-btn"
+        onClick={() => navigate('/movies')}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1, delay: 0.5 }}
+        viewport={{ once: true, amount: 0.3 }}
+      >
+        Explore All Movies
+      </motion.button>
     </section>
   );
 };

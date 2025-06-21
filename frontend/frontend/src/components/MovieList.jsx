@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Slider from 'react-slick';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -8,28 +8,30 @@ import 'slick-carousel/slick/slick-theme.css';
 const MovieList = () => {
   const navigate = useNavigate();
   const [movies, setMovies] = useState([]);
+  const sliderRef = useRef(null);
 
   const settings = {
     dots: true,
     infinite: true,
-    speed: 600,
+    speed: 800,
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
-    arrows: false
+    arrows: false,
   };
 
   useEffect(() => {
     axios.get("http://localhost:8000/api/movies/")
-      .then((res) => setMovies(res.data))
+      .then((res) => {
+        setMovies(res.data);
+      })
       .catch((err) => console.error("Error fetching movies:", err));
   }, []);
 
   return (
     <div className="movie-page">
-      {/* 🎞️ Slider Section */}
-      <div className="movie-slider">
-        <Slider {...settings}>
+      <div className="movie-slider-wrapper">
+        <Slider {...settings} className="movie-slider" ref={sliderRef}>
           {movies.map((movie, idx) => (
             <div key={idx} className="slider-card">
               <img src={movie.poster_url} alt={movie.title} />
@@ -72,7 +74,6 @@ const MovieList = () => {
           >
             ➕ Add New Movie
           </button>
-
         </div>
         <div className="movie-grid">
           {movies.map((movie, index) => (
@@ -82,7 +83,7 @@ const MovieList = () => {
               <p>{movie.genre}</p>
               <p>⏱️ {movie.duration}</p>
               <p>🎞️ {movie.language}</p>
-              <p>🕘 Showtime: {movie.show_time}</p> {/* ✅ FIXED */}
+              <p>🕘 Showtime: {movie.show_time}</p>
               <button onClick={() => navigate(`/booking/${movie.title}`)}>Book Now</button>
             </div>
           ))}

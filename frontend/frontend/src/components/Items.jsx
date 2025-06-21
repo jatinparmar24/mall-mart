@@ -1,11 +1,11 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
 const Items = () => {
   const navigate = useNavigate();
 
   const ADMIN_EMAIL = "admin@email.com";
-  const ADMIN_PASSWORD = "admin";
 
   const categories = [
     { name: "Electronics", desc: "Smartphones, Laptops, and more", offer: "Up to 40% Off", img: "/electronic_item.jpg" },
@@ -25,8 +25,7 @@ const Items = () => {
   };
 
   const goToAdminDashboard = () => {
-    const user = JSON.parse(localStorage.getItem("mallmartUser")); // Assuming this is how you store user info
-
+    const user = JSON.parse(localStorage.getItem("mallmartUser"));
     if (user && user.email === ADMIN_EMAIL) {
       navigate("/Admindashboard");
     } else {
@@ -43,21 +42,27 @@ const Items = () => {
           Admin Dashboard
         </button>
       </div>
+
       <div className="category-grid">
         {categories.map((item, idx) => (
-          <div className="category-card" key={idx}>
+          <motion.div
+            className="category-card"
+            key={idx}
+            whileHover={{ scale: 1.05 }}
+            initial={{ opacity: 0, y: 60 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: idx * 0.05 }}
+          >
             <img
               src={item.img}
-              alt={`Category ${item.name}`}
-              onError={(e) => e.target.src = "https://via.placeholder.com/300x200?text=No+Image"}
+              alt={item.name}
+              onError={(e) => (e.target.src = "https://via.placeholder.com/300x200?text=No+Image")}
             />
             <h2>{item.name}</h2>
             <p>{item.desc}</p>
             <span className="offer">{item.offer}</span>
             <button onClick={() => handleShop(item.name)}>Shop Now</button>
-            
-
-          </div>
+          </motion.div>
         ))}
       </div>
     </div>
