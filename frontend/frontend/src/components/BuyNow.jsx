@@ -41,7 +41,7 @@ const BuyNow = () => {
     const amountInPaise = Number(item.price) * 100;
 
     const options = {
-      key: "rzp_test_pr99iascS1WRtU", // Replace with your actual Razorpay key
+      key: "rzp_test_pr99iascS1WRtU", 
       amount: amountInPaise,
       currency: "INR",
       name: "Mall Mart",

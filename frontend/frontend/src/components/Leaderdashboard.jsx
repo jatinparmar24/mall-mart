@@ -104,18 +104,22 @@ const LeaderDashboard = () => {
     <div className="leader-dashboard">
       <h1>🏆 Leader Dashboard</h1>
 
-      <section>
-        <h2>🎲 Dice Duel</h2>
-        <table className="leader-dashboard-table">
-          <thead>
-            <tr>
-              <th>#</th><th>Player 1</th><th>Score</th><th>Player 2</th><th>Score</th><th>Winner</th><th>Date</th>
-            </tr>
-          </thead>
-          <tbody>{renderRows(data.dice, 'dice')}</tbody>
-        </table>
-        {renderPagination('dice')}
-      </section>
+     <section>
+       <h2>🎲 Dice Duel</h2>
+       <div className="leader-dashboard-scroll">
+         <table className="leader-dashboard-table">
+           <thead>
+             <tr>
+               <th>#</th><th>Player 1</th><th>Score</th>
+               <th>Player 2</th><th>Score</th><th>Winner</th><th>Date</th>
+             </tr>
+           </thead>
+           <tbody>{renderRows(data.dice, 'dice')}</tbody>
+         </table>
+       </div>
+       {renderPagination('dice')}
+     </section>
+
 
       <section>
         <h2>⭕ Tic Tac Toe</h2>

@@ -61,42 +61,53 @@ const CategoryItems = () => {
   }
 
   const handleBuyNow = (item) => {
-    const numericPrice = parseFloat(item.price.replace(/[₹,]/g, ""));
-    if (isNaN(numericPrice)) return alert("Invalid price format.");
+  const userData = JSON.parse(localStorage.getItem("mallmartUser"));
+  if (!userData || !userData.username) {
+    alert("Please login to proceed with purchase.");
+    return navigate("/login");
+  }
 
-    navigate("/buy", {
-      state: {
-        item: {
-          name: item.name,
-          price: numericPrice,
-          img: item.image || "https://via.placeholder.com/300x200?text=No+Image",
-        },
-      },
-    });
-  };
+  const numericPrice = parseFloat(item.price.replace(/[₹,]/g, ""));
+  if (isNaN(numericPrice)) return alert("Invalid price format.");
 
-  const handleAddToCart = async (item) => {
-    const userData = JSON.parse(localStorage.getItem("mallmartUser"));
-    if (!userData || !userData.username) {
-      return alert("Please login to add items to cart.");
-    }
-
-    const numericPrice = parseFloat(item.price.replace(/[₹,]/g, ""));
-    if (isNaN(numericPrice)) return alert("Invalid price format.");
-
-    try {
-      await axios.post("http://localhost:8000/api/cart/", {
-        user: userData.username,
-        item: item.name,
+  navigate("/buy", {
+    state: {
+      item: {
+        name: item.name,
         price: numericPrice,
-        image: item.image,
-      });
-      alert("Item added to cart ✅");
-    } catch (err) {
-      alert("Failed to add to cart ❌");
-      console.error(err);
-    }
+        img: item.image || "https://via.placeholder.com/300x200?text=No+Image",
+      },
+    },
+  });
+};
+
+const handleAddToCart = async (item) => {
+  const userData = JSON.parse(localStorage.getItem("mallmartUser"));
+  if (!userData || !userData.username) {
+    return alert("Please login to add items to cart.");
+  }
+
+  const numericPrice = parseFloat(item.price.replace(/[₹,]/g, ""));
+  if (isNaN(numericPrice)) return alert("Invalid price format.");
+
+  const cartPayload = {
+    user: userData.username,
+    item: item.name,
+    price: numericPrice,
+    image: `${window.location.origin}${item.image}`,  // convert to full URL
   };
+
+  console.log("Sending cart payload:", cartPayload); // 👈 log it
+
+  try {
+    await axios.post("http://localhost:8000/api/cart/", cartPayload);
+    alert("Item added to cart ✅");
+  } catch (err) {
+    console.error("Cart error response:", err.response?.data || err.message);
+    alert("Failed to add to cart ❌");
+  }
+};
+
 
   return (
     <motion.div

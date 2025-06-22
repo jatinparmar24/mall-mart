@@ -1,35 +1,41 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
+
 const games = [
   {
     id: 1,
     title: "Dice Duel",
     image: "/images/dice-game.png",
     description: "Roll the dice and try your luck!",
-    path: "/games/dice"
+    path: "/games/dice",
+    featured: true,
+    stats: "Players Today: 120+",
   },
   {
     id: 2,
     title: "Tic Tac Toe",
     image: "/images/tic-tac-toe.png",
     description: "Classic 2-player X and O challenge!",
-    path: "/games/tictactoe"
+    path: "/games/tictactoe",
+    stats: "Players Today: 85+",
   },
   {
     id: 3,
     title: "Guess the Number",
     image: "/images/guess-number.png",
     description: "Try to guess the secret number in limited tries.",
-    path: "/games/guess"
+    path: "/games/guess",
+    stats: "Players Today: 98+",
   },
   {
     id: 4,
     title: "Quiz Competition",
     image: "/images/quiz.png",
     description: "Answer rapid fire questions and test your knowledge!",
-    path: "/games/quiz"
-  }
+    path: "/games/quiz",
+    stats: "Players Today: 110+",
+  },
 ];
 
 const GamesList = () => {
@@ -63,15 +69,26 @@ const GamesList = () => {
           🏆 Leader Dashboard
         </button>
       </div>
+
+      <p className="games-intro">
+        Dive into a world of exciting and addictive games. Compete, learn, and have fun — all in one place!
+      </p>
+
       <div className="games-grid">
         {games.map((game) => (
           <div className="game-card" key={game.id}>
+            {game.featured && <div className="featured-badge">🔥 Featured</div>}
             <img src={game.image} alt={game.title} />
             <h3>{game.title}</h3>
             <p>{game.description}</p>
+            <div className="game-stats">{game.stats}</div>
             <button onClick={() => handlePlayGame(game.path)}>▶ Play</button>
           </div>
         ))}
+      </div>
+
+      <div className="games-footer-note">
+        🚀 More exciting games coming soon. Stay tuned!
       </div>
     </div>
   );

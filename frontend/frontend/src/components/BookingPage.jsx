@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const rowPrices = {
@@ -27,13 +26,16 @@ const BookingPage = () => {
   const languageOptions = ['Hindi', 'English', 'Tamil', 'Telugu'];
   const rowOptions = ['Gold', 'Silver', 'Diamond'];
 
-  // ✅ Set user email from localStorage on load
+  // ✅ Check login status and preload email
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("mallmartUser"));
-    if (user?.email) {
+    if (!user || !user.email) {
+      alert("Please login to book tickets.");
+      navigate("/login");
+    } else {
       setFormData((prev) => ({ ...prev, email: user.email }));
     }
-  }, []);
+  }, [navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -50,6 +52,12 @@ const BookingPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const user = JSON.parse(localStorage.getItem("mallmartUser"));
+    if (!user || !user.email) {
+      alert("Please login to confirm booking.");
+      return navigate("/login");
+    }
 
     const bookingData = {
       email: formData.email,
@@ -70,96 +78,94 @@ const BookingPage = () => {
   };
 
   return (
-
     <>
-    <div style={{ position: "absolute", top: "150px", left: "30px" }}>
-      <button
-        onClick={() => navigate("/movies")}
-        style={{
-          padding: "8px 16px",
-          borderRadius: "6px",
-          background: "#1976d2",
-          color: "white",
-          border: "none",
-          cursor: "pointer"
-        }}
-      >
-        ← Back to Movie Section
-      </button>
-    </div>
-
-    
-    <div className="booking-wrapper">
-      <div className="booking-container">
-        <h2>🎬 Book Tickets for: <span>{movieTitle}</span></h2>
-
-        <form className="booking-form" onSubmit={handleSubmit}>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            readOnly
-            required
-          />
-
-          <select name="seatCount" onChange={handleChange} required>
-            {[...Array(10)].map((_, i) => (
-              <option key={i + 1} value={i + 1}>
-                {i + 1} Seat(s)
-              </option>
-            ))}
-          </select>
-
-          <select name="rowType" onChange={handleChange} required>
-            <option value="">Select Row</option>
-            {rowOptions.map((row) => (
-              <option key={row} value={row}>
-                {row} - ₹{rowPrices[row]}
-              </option>
-            ))}
-          </select>
-
-          <select name="show_time" onChange={handleChange} required>
-            <option value="">🕘 Select Show Time</option>
-            {timeOptions.map((time) => (
-              <option key={time} value={time}>
-                {time}
-              </option>
-            ))}
-          </select>
-
-          <select name="language" onChange={handleChange} required>
-            <option value="">🌐 Select Language</option>
-            {languageOptions.map((lang) => (
-              <option key={lang} value={lang}>
-                {lang}
-              </option>
-            ))}
-          </select>
-
-          {formData.seatCount && formData.rowType && (
-            <p style={{ margin: '10px 0', fontWeight: 'bold' }}>
-              💰 Total Payable: ₹{totalAmount}
-            </p>
-          )}
-
-          <button type="submit">✅ Confirm Booking</button>
-        </form>
-
-        {submitted && (
-          <div className="booking-summary">
-            <p className="success-msg">🎉 Booking Confirmed Successfully!</p>
-            <h3>📋 Booking Summary</h3>
-            <p><strong>Movie:</strong> {movieTitle}</p>
-            <p><strong>Email:</strong> {formData.email}</p>
-            <p><strong>Seats:</strong> {formData.seatCount} in {formData.rowType}</p>
-            <p><strong>Show Time:</strong> {formData.show_time}</p>
-            <p><strong>Language:</strong> {formData.language}</p>
-            <p><strong>Total Amount:</strong> ₹{totalAmount}</p>
-          </div>
-        )}
+      <div style={{ position: "absolute", top: "150px", left: "30px" }}>
+        <button
+          onClick={() => navigate("/movies")}
+          style={{
+            padding: "8px 16px",
+            borderRadius: "6px",
+            background: "#1976d2",
+            color: "white",
+            border: "none",
+            cursor: "pointer"
+          }}
+        >
+          ← Back to Movie Section
+        </button>
       </div>
-    </div>
+
+      <div className="booking-wrapper">
+        <div className="booking-container">
+          <h2>🎬 Book Tickets for: <span>{movieTitle}</span></h2>
+
+          <form className="booking-form" onSubmit={handleSubmit}>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              readOnly
+              required
+            />
+
+            <select name="seatCount" onChange={handleChange} required>
+              {[...Array(10)].map((_, i) => (
+                <option key={i + 1} value={i + 1}>
+                  {i + 1} Seat(s)
+                </option>
+              ))}
+            </select>
+
+            <select name="rowType" onChange={handleChange} required>
+              <option value="">Select Row</option>
+              {rowOptions.map((row) => (
+                <option key={row} value={row}>
+                  {row} - ₹{rowPrices[row]}
+                </option>
+              ))}
+            </select>
+
+            <select name="show_time" onChange={handleChange} required>
+              <option value="">🕘 Select Show Time</option>
+              {timeOptions.map((time) => (
+                <option key={time} value={time}>
+                  {time}
+                </option>
+              ))}
+            </select>
+
+            <select name="language" onChange={handleChange} required>
+              <option value="">🌐 Select Language</option>
+              {languageOptions.map((lang) => (
+                <option key={lang} value={lang}>
+                  {lang}
+                </option>
+              ))}
+            </select>
+
+            {formData.seatCount && formData.rowType && (
+              <p style={{ margin: '10px 0', fontWeight: 'bold' }}>
+                💰 Total Payable: ₹{totalAmount}
+              </p>
+            )}
+
+            <button type="submit">✅ Confirm Booking</button>
+          </form>
+
+          {submitted && (
+            <div className="booking-summary">
+              <p className="success-msg">🎉 Booking Confirmed Successfully!</p>
+              <h3>📋 Booking Summary</h3>
+              <p><strong>Movie:</strong> {movieTitle}</p>
+              <p><strong>Email:</strong> {formData.email}</p>
+              <p><strong>Seats:</strong> {formData.seatCount} in {formData.rowType}</p>
+              <p><strong>Show Time:</strong> {formData.show_time}</p>
+              <p><strong>Language:</strong> {formData.language}</p>
+              <p><strong>Total Amount:</strong> ₹{totalAmount}</p>
+            </div>
+          )}
+        </div>
+      </div>
     </>
   );
 };
