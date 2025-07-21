@@ -67,12 +67,8 @@ export default function Layout() {
       </main>
 
       {/* === FOOTER === */}
-      <motion.footer
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="footer"
-      >
+      <footer className="footer">
+
         <div className="footer-container">
           <div className="footer-brand">
             <h2>EduMaster</h2>
@@ -100,7 +96,7 @@ export default function Layout() {
         <div className="footer-bottom">
           <p>&copy; {new Date().getFullYear()} EduMaster. All rights reserved.</p>
         </div>
-      </motion.footer>
+      </footer>
     </>
   );
 }
