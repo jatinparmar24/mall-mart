@@ -17,19 +17,19 @@ from rest_framework import serializers
 from .models import LMSUser
 
 class LoginSerializer(serializers.Serializer):
-    email = serializers.EmailField()
-    password = serializers.CharField()
+    useremail = serializers.EmailField()
+    userpass = serializers.CharField()
 
     def validate(self, data):
-        email = data.get('email')
-        password = data.get('password')
+        useremail = data.get('useremail')
+        userpass = data.get('userpass')
 
         try:
-            user = LMSUser.objects.get(email=email)
+            user = LMSUser.objects.get(useremail=useremail)
         except LMSUser.DoesNotExist:
-            raise serializers.ValidationError("Email not found")
+            raise serializers.ValidationError("Email not found.")
 
-        if user.password != password:
-            raise serializers.ValidationError("Incorrect password")
+        if user.userpass != userpass:
+            raise serializers.ValidationError("Incorrect password.")
 
         return data

@@ -1,16 +1,26 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
 export default function Layout() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userEmail, setUserEmail] = useState('');
+  const [showDropdown, setShowDropdown] = useState(false);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const email = localStorage.getItem('loggedInUser');
+    if (email) setUserEmail(email);
+  }, []);
+
   const handleLogout = () => {
-    console.log('Logged out');
-    setIsLoggedIn(false);
+    localStorage.removeItem('loggedInUser');
+    setUserEmail('');
     navigate('/');
+  };
+
+  const toggleDropdown = () => {
+    setShowDropdown(!showDropdown);
   };
 
   return (
@@ -47,15 +57,26 @@ export default function Layout() {
             <Link to="/contact">Contact</Link>
           </div>
 
-          {/* Right - Auth Buttons */}
+          {/* Right - Auth Section */}
           <div className="navbar-right">
-            {!isLoggedIn ? (
+            {!userEmail ? (
               <>
                 <Link to="/signup" className="auth-btn">Sign Up</Link>
                 <Link to="/login" className="auth-btn">Login</Link>
               </>
             ) : (
-              <button className="auth-btn" onClick={handleLogout}>Logout</button>
+              <div className="user-dropdown">
+                <button className="auth-btn user-btn" onClick={toggleDropdown}>
+                  {userEmail.split('@')[0]} ▼
+                </button>
+                {showDropdown && (
+                  <div className="dropdown-menu">
+                    <p><strong>User:</strong> {userEmail.split('@')[0]}</p>
+                    <p><strong>Email:</strong> {userEmail}</p>
+                    <button onClick={handleLogout} className="dropdown-logout">Logout</button>
+                  </div>
+                )}
+              </div>
             )}
           </div>
         </div>
@@ -68,7 +89,6 @@ export default function Layout() {
 
       {/* === FOOTER === */}
       <footer className="footer">
-
         <div className="footer-container">
           <div className="footer-brand">
             <h2>EduMaster</h2>
