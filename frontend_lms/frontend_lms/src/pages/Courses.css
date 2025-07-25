@@ -1,0 +1,146 @@
+/* pages/Courses.css */
+
+.courses-page {
+  padding: 2rem;
+  background: linear-gradient(to bottom right, #e3f2fd, #fff);
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.courses-page::before {
+  content: '';
+  position: absolute;
+  top: -60px;
+  left: -60px;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, #cde1ff 0%, transparent 70%);
+  z-index: 0;
+}
+
+.slider-wrapper {
+  margin-bottom: 3rem;
+  position: relative;
+  z-index: 2;
+}
+
+.slider-item {
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 1.5rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.slider-item img {
+  max-width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+}
+
+.slider-info {
+  text-align: center;
+}
+
+.course-section {
+  position: relative;
+  z-index: 2;
+}
+
+.courses-heading {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.filters input,
+.filters select {
+  padding: 0.6rem 1rem;
+  border: 1px solid #aaa;
+  border-radius: 10px;
+  font-size: 1rem;
+}
+
+.course-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+}
+
+.course-card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 1.5rem;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.course-card img {
+  max-width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+}
+
+.course-card .price {
+  display: block;
+  font-weight: bold;
+  color: #0077cc;
+  margin: 0.5rem 0;
+}
+
+.course-card button {
+  padding: 0.5rem 1rem;
+  background: #0077cc;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 2rem;
+}
+
+.pagination button {
+  padding: 8px 14px;
+  border: none;
+  background: #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.pagination button.active {
+  background: #0077cc;
+  color: white;
+}
+
+@media (max-width: 600px) {
+  .filters {
+    flex-direction: column;
+  }
+
+  .slider-item img,
+  .course-card img {
+    height: 160px;
+  }
+}

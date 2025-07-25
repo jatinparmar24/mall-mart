@@ -14,11 +14,18 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
+from django.conf import settings
+from django.conf.urls.static import static
 from django.urls import path
 from appedumaster.views import *
 
 urlpatterns = [
-    path('signup/', signup_view, name='signup'),
-    path('login/', login_view),
+    path('signup/' ,  signup_view, name='signup'),
+    path('login/'  ,  login_view,  name='login'),
+    path('api/courses/', CourseListView.as_view(), name='course-list'),
+    path('admin/add-course/', AddCourseView.as_view(), name='add-course'),
+    path('admin/purchases/', EnrollmentListView.as_view(), name='view-enrollments'),
 
-]
+
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

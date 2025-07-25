@@ -5,6 +5,10 @@ import Layout from './components/Layout';
 import Home from './components/Home';
 import SignUp from './components/SignUp';
 import Login from './components/Login';
+import Courses from './pages/Courses';
+import AdminPanel from './pages/AdminPanel';
+
+
 
 
 
@@ -16,6 +20,9 @@ function App() {
           <Route index element={<Home />} />
           <Route path="signup" element={<SignUp />} /> 
           <Route path="login" element={<Login />} /> 
+          <Route path="/courses" element={<Courses />} />
+          <Route path="/adminpanel" element={<AdminPanel />} />
+
 
           
         </Route>

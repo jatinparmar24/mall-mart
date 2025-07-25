@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import LMSUser
+from .models import LMSUser,Course,Enrollment
 
 
 # sign up
@@ -10,11 +10,6 @@ class LMSUserSerializer(serializers.ModelSerializer):
 
 
 # login
-
-# serializers.py
-
-from rest_framework import serializers
-from .models import LMSUser
 
 class LoginSerializer(serializers.Serializer):
     useremail = serializers.EmailField()
@@ -33,3 +28,19 @@ class LoginSerializer(serializers.Serializer):
             raise serializers.ValidationError("Incorrect password.")
 
         return data
+
+
+class CourseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Course
+        fields = '__all__'
+
+
+class EnrollmentSerializer(serializers.ModelSerializer):
+    useremail = serializers.CharField(source='user.useremail')
+    username = serializers.CharField(source='user.username')
+    course = serializers.StringRelatedField()
+
+    class Meta:
+        model = Enrollment
+        fields = ['id', 'username', 'useremail', 'course', 'enrolled_at']
