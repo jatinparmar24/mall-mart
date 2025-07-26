@@ -5,8 +5,8 @@ import Layout from './components/Layout';
 import Home from './components/Home';
 import SignUp from './components/SignUp';
 import Login from './components/Login';
-import Courses from './pages/Courses';
-import AdminPanel from './pages/AdminPanel';
+import Courses from './components/Courses';
+import AdminPanel from './components/AdminPanel';
 
 
 

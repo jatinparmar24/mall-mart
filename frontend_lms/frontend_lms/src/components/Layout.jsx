@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, Outlet, useNavigate } from 'react-router-dom';
+import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom'; // ⬅️ added useLocation
 import { motion } from 'framer-motion';
 
 export default function Layout() {
@@ -7,11 +7,13 @@ export default function Layout() {
   const [userEmail, setUserEmail] = useState('');
   const [showDropdown, setShowDropdown] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation(); // track route changes
 
+  // Re-run every time route changes, to check login state
   useEffect(() => {
     const email = localStorage.getItem('loggedInUser');
-    if (email) setUserEmail(email);
-  }, []);
+    setUserEmail(email || '');
+  }, [location]); //triggers on navigation, even after login/signup
 
   const handleLogout = () => {
     localStorage.removeItem('loggedInUser');
