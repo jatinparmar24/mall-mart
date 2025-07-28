@@ -1,4 +1,5 @@
 from rest_framework.decorators import api_view
+from rest_framework.generics import RetrieveAPIView
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -18,8 +19,16 @@ def signup_view(request):
 def login_view(request):
     serializer = LoginSerializer(data=request.data)
     if serializer.is_valid():
-        return Response({"message": "Login successful"}, status=status.HTTP_200_OK)
+        useremail = serializer.validated_data['useremail']
+        user = LMSUser.objects.get(useremail=useremail)
+
+        return Response({
+            "message": "Login successful",
+            "useremail": user.useremail,
+        }, status=status.HTTP_200_OK)
+
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 class CourseListView(APIView):
@@ -41,3 +50,31 @@ class EnrollmentListView(APIView):
         enrollments = Enrollment.objects.select_related('user', 'course').all()
         serializer = EnrollmentSerializer(enrollments, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+def enroll_course(request):
+    useremail = request.data.get('useremail')
+    course_id = request.data.get('course_id')
+
+    try:
+        user = LMSUser.objects.get(useremail=useremail)
+        course = Course.objects.get(id=course_id)
+    except LMSUser.DoesNotExist:
+        return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+    except Course.DoesNotExist:
+        return Response({'error': 'Course not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    # Check if already enrolled
+    if Enrollment.objects.filter(user=user, course=course).exists():
+        return Response({'message': 'Already enrolled'}, status=status.HTTP_200_OK)
+
+    Enrollment.objects.create(user=user, course=course)
+    return Response({'message': 'Enrolled successfully'}, status=status.HTTP_201_CREATED)
+
+
+
+
+class CourseDetailView(RetrieveAPIView):
+    queryset = Course.objects.all()
+    serializer_class = CourseSerializer

@@ -54,7 +54,6 @@ export default function Layout() {
           {/* Center - Navigation Links */}
           <div className={`navbar-center ${isOpen ? 'open' : ''}`}>
             <Link to="/">Home</Link>
-            <Link to="/about">About</Link>
             <Link to="/courses">Courses</Link>
             <Link to="/adminpanel">AdminPanel</Link>
           </div>

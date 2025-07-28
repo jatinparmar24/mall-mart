@@ -25,11 +25,14 @@ const Login = () => {
       const response = await axios.post('http://127.0.0.1:8000/login/', {
         useremail: formData.useremail,
         userpass: formData.userpass
-
       });
 
       if (response.status === 200) {
-        localStorage.setItem('loggedInUser', formData.useremail);
+        // Save user details to localStorage
+        const user = {
+          useremail: response.data.useremail
+        };
+        localStorage.setItem('lms_user', JSON.stringify(user));
         navigate('/');
       }
     } catch (err) {

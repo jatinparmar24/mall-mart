@@ -21,11 +21,13 @@ from django.urls import path
 from appedumaster.views import *
 
 urlpatterns = [
-    path('signup/' ,  signup_view, name='signup'),
-    path('login/'  ,  login_view,  name='login'),
+    path('signup/', signup_view, name='signup'),
+    path('login/', login_view, name='login'),
     path('api/courses/', CourseListView.as_view(), name='course-list'),
+    path('api/courses/<int:pk>/', CourseDetailView.as_view(), name='course-detail'),  # NEW
     path('admin/add-course/', AddCourseView.as_view(), name='add-course'),
-    path('admin/purchases/', EnrollmentListView.as_view(), name='view-enrollments'),
+    path('api/enroll/', enroll_course, name='enroll'),
+    path('api/enrollments/', EnrollmentListView.as_view(), name='view-enrollments'),
 
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

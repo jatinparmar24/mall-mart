@@ -7,10 +7,7 @@ import SignUp from './components/SignUp';
 import Login from './components/Login';
 import Courses from './components/Courses';
 import AdminPanel from './components/AdminPanel';
-
-
-
-
+import CourseDetail from './components/CourseDetail'; 
 
 function App() {
   return (
@@ -20,11 +17,9 @@ function App() {
           <Route index element={<Home />} />
           <Route path="signup" element={<SignUp />} /> 
           <Route path="login" element={<Login />} /> 
-          <Route path="/courses" element={<Courses />} />
-          <Route path="/adminpanel" element={<AdminPanel />} />
-
-
-          
+          <Route path="courses" element={<Courses />} />
+          <Route path="adminpanel" element={<AdminPanel />} />
+          <Route path="courses/:id" element={<CourseDetail />} /> 
         </Route>
       </Routes>
     </Router>

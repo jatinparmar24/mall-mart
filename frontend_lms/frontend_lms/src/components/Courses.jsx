@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Slider from 'react-slick';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
@@ -11,6 +12,7 @@ const Courses = () => {
   const [sortOrder, setSortOrder] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const coursesPerPage = 4;
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios.get('http://localhost:8000/api/courses/')
@@ -92,6 +94,13 @@ const Courses = () => {
               <h3>{course.title}</h3>
               <p>{course.description}</p>
               <span>₹{course.price}</span>
+              <button
+                className="courses-view-btn"
+                onClick={() => navigate(`/courses/${course.id}`)}
+              >
+               View Details
+              </button>
+
             </div>
           </motion.div>
         ))}
