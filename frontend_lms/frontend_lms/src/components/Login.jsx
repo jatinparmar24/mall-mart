@@ -3,77 +3,50 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
-  const [formData, setFormData] = useState({
-    useremail: '',
-    userpass: ''
-  });
-
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [useremail, setUseremail] = useState('');
+  const [userpass, setUserpass] = useState('');
+  const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    setError('');
-    setLoading(true);
 
     try {
-      const response = await axios.post('http://127.0.0.1:8000/login/', {
-        useremail: formData.useremail,
-        userpass: formData.userpass
+      const res = await axios.post('http://localhost:8000/login/', {
+        useremail,
+        userpass
       });
 
-      if (response.status === 200) {
-        // Save user details to localStorage
-        const user = {
-          useremail: response.data.useremail
-        };
-        localStorage.setItem('lms_user', JSON.stringify(user));
+      if (res.status === 200) {
+        localStorage.setItem('loggedInUser', useremail);
+        setMessage('Login successful');
         navigate('/');
       }
     } catch (err) {
-      setError('Login failed: Invalid email or password.');
+      setMessage('Invalid credentials');
     }
-
-    setLoading(false);
   };
 
   return (
-    <div className="login-wrapper">
-      <form className="login-form" onSubmit={handleSubmit}>
-        <h2>Login</h2>
-
-        <div className="input-group">
-          <input
-            type="email"
-            name="useremail"
-            required
-            value={formData.useremail}
-            onChange={handleChange}
-          />
-          <label>Email</label>
-        </div>
-
-        <div className="input-group">
-          <input
-            type="password"
-            name="userpass"
-            required
-            value={formData.userpass}
-            onChange={handleChange}
-          />
-          <label>Password</label>
-        </div>
-
-        {error && <p className="error">{error}</p>}
-
-        <button type="submit" disabled={loading}>
-          {loading ? 'Logging In...' : 'Login'}
-        </button>
+    <div className="login-container">
+      <h2>Login</h2>
+      <form onSubmit={handleLogin}>
+        <input
+          type="email"
+          placeholder="Email"
+          value={useremail}
+          onChange={(e) => setUseremail(e.target.value)}
+          required
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={userpass}
+          onChange={(e) => setUserpass(e.target.value)}
+          required
+        />
+        <button type="submit">Login</button>
+        {message && <p>{message}</p>}
       </form>
     </div>
   );

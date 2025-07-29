@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom'; // ⬅️ added useLocation
+import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
 export default function Layout() {
@@ -7,13 +7,12 @@ export default function Layout() {
   const [userEmail, setUserEmail] = useState('');
   const [showDropdown, setShowDropdown] = useState(false);
   const navigate = useNavigate();
-  const location = useLocation(); // track route changes
+  const location = useLocation();
 
-  // Re-run every time route changes, to check login state
   useEffect(() => {
     const email = localStorage.getItem('loggedInUser');
     setUserEmail(email || '');
-  }, [location]); //triggers on navigation, even after login/signup
+  }, [location]);
 
   const handleLogout = () => {
     localStorage.removeItem('loggedInUser');
@@ -27,7 +26,6 @@ export default function Layout() {
 
   return (
     <>
-      {/* === NAVBAR === */}
       <motion.nav
         initial={{ y: -60, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -35,12 +33,10 @@ export default function Layout() {
         className="navbar"
       >
         <div className="navbar-container">
-          {/* Left - Logo */}
           <div className="navbar-left">
             <Link to="/" className="navbar-logo">EduMaster</Link>
           </div>
 
-          {/* Hamburger Toggle */}
           <button
             className="navbar-toggle"
             onClick={() => setIsOpen(!isOpen)}
@@ -51,14 +47,12 @@ export default function Layout() {
             <span className="bar"></span>
           </button>
 
-          {/* Center - Navigation Links */}
           <div className={`navbar-center ${isOpen ? 'open' : ''}`}>
             <Link to="/">Home</Link>
             <Link to="/courses">Courses</Link>
             <Link to="/adminpanel">AdminPanel</Link>
           </div>
 
-          {/* Right - Auth Section */}
           <div className="navbar-right">
             {!userEmail ? (
               <>
@@ -83,19 +77,16 @@ export default function Layout() {
         </div>
       </motion.nav>
 
-      {/* === OUTLET === */}
       <main className="main-content">
         <Outlet />
       </main>
 
-      {/* === FOOTER === */}
       <footer className="footer">
         <div className="footer-container">
           <div className="footer-brand">
             <h2>EduMaster</h2>
             <p>Empowering learning, one click at a time.</p>
           </div>
-
           <div className="footer-links">
             <h4>Quick Links</h4>
             <ul>
@@ -105,7 +96,6 @@ export default function Layout() {
               <li><Link to="/contact">Contact</Link></li>
             </ul>
           </div>
-
           <div className="footer-contact">
             <h4>Contact</h4>
             <p>Email: support@edumaster.com</p>
@@ -113,7 +103,6 @@ export default function Layout() {
             <p>Address: New Delhi, India</p>
           </div>
         </div>
-
         <div className="footer-bottom">
           <p>&copy; {new Date().getFullYear()} EduMaster. All rights reserved.</p>
         </div>

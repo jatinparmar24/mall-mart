@@ -1,5 +1,7 @@
 from rest_framework.decorators import api_view
 from rest_framework.generics import RetrieveAPIView
+from django.utils import timezone
+from datetime import timedelta
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -65,12 +67,22 @@ def enroll_course(request):
     except Course.DoesNotExist:
         return Response({'error': 'Course not found'}, status=status.HTTP_404_NOT_FOUND)
 
-    # Check if already enrolled
-    if Enrollment.objects.filter(user=user, course=course).exists():
-        return Response({'message': 'Already enrolled'}, status=status.HTTP_200_OK)
+    # Get latest enrollment (if any)
+    existing_enrollment = Enrollment.objects.filter(user=user, course=course).order_by('-enrolled_at').first()
 
+    if existing_enrollment:
+        time_diff = timezone.now() - existing_enrollment.enrolled_at
+        if time_diff < timedelta(days=10):
+            remaining_days = 10 - time_diff.days
+            return Response({
+                'message': f'Already enrolled. You can re-enroll after {remaining_days} more day(s).'
+            }, status=status.HTTP_200_OK)
+
+    # Create new enrollment
     Enrollment.objects.create(user=user, course=course)
     return Response({'message': 'Enrolled successfully'}, status=status.HTTP_201_CREATED)
+
+
 
 
 

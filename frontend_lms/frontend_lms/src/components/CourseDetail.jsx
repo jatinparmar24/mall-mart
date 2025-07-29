@@ -1,86 +1,99 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import { motion } from 'framer-motion';
 
 const CourseDetail = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
   const [course, setCourse] = useState(null);
+  const [userEmail, setUserEmail] = useState('');
+  const [isEnrolled, setIsEnrolled] = useState(false);
+  const [cooldownDays, setCooldownDays] = useState(0);
   const [message, setMessage] = useState('');
-  const [alreadyEnrolled, setAlreadyEnrolled] = useState(false);
 
   useEffect(() => {
-    // 1. Fetch course details
-    axios.get(`http://localhost:8000/api/courses/${id}/`)
-      .then(res => setCourse(res.data))
-      .catch(() => setMessage('Error loading course.'));
+    const email = localStorage.getItem('useremail');
+    if (email) setUserEmail(email);
+  }, []);
 
-    // 2. Check if user already enrolled
-    const user = JSON.parse(localStorage.getItem('lms_user'));
-    if (user) {
-      axios.get('http://localhost:8000/api/enrollments/')
-        .then(res => {
-          const enrolled = res.data.some(enr =>
-            enr.useremail === user.useremail &&
-            enr.course === course?.title
-          );
-          setAlreadyEnrolled(enrolled);
-        });
-    }
-  }, [id, course?.title]);
+  useEffect(() => {
+    const fetchCourse = async () => {
+      try {
+        const res = await axios.get(`http://localhost:8000/api/courses/${id}/`);
+        setCourse(res.data);
+      } catch (error) {
+        console.error('Error fetching course details:', error);
+      }
+    };
+    fetchCourse();
+  }, [id]);
 
-  const handleBuy = () => {
-    const user = JSON.parse(localStorage.getItem('lms_user'));
+  useEffect(() => {
+    const checkEnrollment = async () => {
+      if (!userEmail || !id) return;
+      try {
+        const res = await axios.get('http://localhost:8000/api/enrollments');
+        const userEnrollments = res.data.filter(
+          (e) => e.user.useremail === userEmail && e.course.id === parseInt(id)
+        );
 
-    if (!user) {
-      navigate('/login');
-      return;
-    }
+        if (userEnrollments.length > 0) {
+          const latest = userEnrollments.sort(
+            (a, b) => new Date(b.enrolled_at) - new Date(a.enrolled_at)
+          )[0];
+          const enrolledAt = new Date(latest.enrolled_at);
+          const now = new Date();
+          const diffDays = Math.floor((now - enrolledAt) / (1000 * 60 * 60 * 24));
 
-    axios.post('http://localhost:8000/api/enroll/', {
-      useremail: user.useremail,
-      course_id: id
-    })
-      .then(res => {
-        setMessage(res.data.message);
-        if (res.data.message === 'Enrolled successfully') {
-          setAlreadyEnrolled(true);
+          if (diffDays < 10) {
+            setIsEnrolled(true);
+            setCooldownDays(10 - diffDays);
+          }
         }
-      })
-      .catch(() => setMessage('Something went wrong.'));
+      } catch (error) {
+        console.error('Error checking enrollment:', error);
+      }
+    };
+
+    checkEnrollment();
+  }, [userEmail, id]);
+
+  const handleEnroll = async () => {
+    try {
+      const res = await axios.post('http://localhost:8000/api/enroll/', {
+        useremail: userEmail,
+        course_id: id,
+      });
+      setMessage(res.data.message);
+      if (res.data.message.includes("Enrolled successfully")) {
+        setIsEnrolled(true);
+        setCooldownDays(10);
+      }
+    } catch (error) {
+      setMessage('Error enrolling in course');
+      console.error(error);
+    }
   };
 
-  if (!course) return <div className="course-detail">Loading...</div>;
+  if (!course) return <div>Loading...</div>;
 
   return (
-    <div className="course-detail">
-      <img src={course.thumbnail} alt={course.title} className="course-image" />
-      <div className="course-info">
-        <h1>{course.title}</h1>
-        <p>{course.description}</p>
-        <h3>Price: ₹{course.price}</h3>
-
-        {course.video_link && (
-          <div className="course-video">
-            <iframe
-              width="100%"
-              height="315"
-              src={course.video_link}
-              title="Course Preview"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
-          </div>
-        )}
-
-        <button className="buy-btn" onClick={handleBuy} disabled={alreadyEnrolled}>
-          {alreadyEnrolled ? 'Already Purchased' : 'Buy Now'}
-        </button>
-
-        {message && <p className="buy-message">{message}</p>}
+    <motion.div className="course-detail-container" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+      <div className="course-detail-card">
+        <img src={course.thumbnail} alt={course.title} className="course-detail-thumbnail" />
+        <h2 className="course-detail-title">{course.title}</h2>
+        <p className="course-detail-description">{course.description}</p>
+        <p className="course-detail-price">₹{course.price}</p>
+        <div className="course-detail-action">
+          {isEnrolled ? (
+            <p className="enroll-info">Already enrolled. You can re-enroll in {cooldownDays} day(s).</p>
+          ) : (
+            <button className="enroll-btn" onClick={handleEnroll}>Enroll Now</button>
+          )}
+          {message && <p className="enroll-message">{message}</p>}
+        </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

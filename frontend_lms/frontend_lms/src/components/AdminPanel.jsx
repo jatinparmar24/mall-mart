@@ -15,7 +15,7 @@ const AdminPanel = () => {
 
   // Fetch all enrollments on mount
   useEffect(() => {
-    axios.get('http://localhost:8000/admin/purchases/')
+      axios.get('http://localhost:8000/api/enrollments/')
       .then(res => setEnrollments(res.data))
       .catch(err => console.log(err));
   }, []);
