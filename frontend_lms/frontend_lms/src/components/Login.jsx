@@ -11,6 +11,15 @@ const Login = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
 
+    // Handle admin login directly on frontend
+    if (useremail === 'admin@email.com' && userpass === 'Admin@12') {
+      localStorage.setItem('loggedInUser', useremail);
+      setMessage('');
+      navigate('/adminpanel');
+      return;
+    }
+
+    // Normal user login handled by backend
     try {
       const res = await axios.post('http://localhost:8000/login/', {
         useremail,
@@ -19,7 +28,7 @@ const Login = () => {
 
       if (res.status === 200) {
         localStorage.setItem('loggedInUser', useremail);
-        setMessage('Login successful');
+        setMessage('');
         navigate('/');
       }
     } catch (err) {
@@ -28,25 +37,35 @@ const Login = () => {
   };
 
   return (
-    <div className="login-container">
-      <h2>Login</h2>
-      <form onSubmit={handleLogin}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={useremail}
-          onChange={(e) => setUseremail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={userpass}
-          onChange={(e) => setUserpass(e.target.value)}
-          required
-        />
+    <div className="login-wrapper">
+      <form className="login-form" onSubmit={handleLogin}>
+        <h2>Login</h2>
+
+        {message && <p className="error">{message}</p>}
+
+        <div className="input-group">
+          <input
+            type="email"
+            value={useremail}
+            onChange={(e) => setUseremail(e.target.value)}
+            required
+            placeholder=" "
+          />
+          <label>Email</label>
+        </div>
+
+        <div className="input-group">
+          <input
+            type="password"
+            value={userpass}
+            onChange={(e) => setUserpass(e.target.value)}
+            required
+            placeholder=" "
+          />
+          <label>Password</label>
+        </div>
+
         <button type="submit">Login</button>
-        {message && <p>{message}</p>}
       </form>
     </div>
   );

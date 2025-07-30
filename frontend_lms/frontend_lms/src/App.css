@@ -1043,7 +1043,6 @@ a {
 
 /* AdminPanel Theme */
 
-
 .admin-panel {
   padding: 2rem;
   min-height: 100vh;
@@ -1113,19 +1112,24 @@ a {
   font-weight: bold;
 }
 
+.table-section {
+  overflow-x: auto;
+}
+
 .table-section table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 1rem;
   background-color: #1e222f;
   border-radius: 8px;
-  overflow: hidden;
+  min-width: 600px; 
 }
 
 .table-section th, .table-section td {
   padding: 1rem;
   text-align: left;
   border-bottom: 1px solid #333;
+  white-space: nowrap;
 }
 
 .table-section th {
@@ -1139,6 +1143,15 @@ a {
 
 .table-section tbody tr:nth-child(even) {
   background-color: #1e222f;
+}
+
+.table-section::-webkit-scrollbar {
+  height: 8px;
+}
+
+.table-section::-webkit-scrollbar-thumb {
+  background-color: #444;
+  border-radius: 10px;
 }
 
 
@@ -1387,7 +1400,7 @@ a {
   /* Footer adjustment */
   .footer-container {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
   }
 
   .footer {

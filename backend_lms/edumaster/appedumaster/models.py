@@ -31,4 +31,5 @@ class Enrollment(models.Model):
     enrolled_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.user.useremail} enrolled in {self.course.name}"
+       return f"{self.user.useremail} enrolled in {self.course.title}"
+

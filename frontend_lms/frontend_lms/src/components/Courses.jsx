@@ -15,7 +15,7 @@ const Courses = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get('http://localhost:8000/api/courses/')
+    axios.get('http://localhost:8000/courses/')
       .then(res => setCourses(res.data))
       .catch(err => console.log(err));
   }, []);

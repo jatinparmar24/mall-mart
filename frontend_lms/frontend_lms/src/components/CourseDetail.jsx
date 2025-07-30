@@ -12,14 +12,14 @@ const CourseDetail = () => {
   const [message, setMessage] = useState('');
 
   useEffect(() => {
-    const email = localStorage.getItem('useremail');
+    const email = localStorage.getItem('loggedInUser');
     if (email) setUserEmail(email);
   }, []);
 
   useEffect(() => {
     const fetchCourse = async () => {
       try {
-        const res = await axios.get(`http://localhost:8000/api/courses/${id}/`);
+        const res = await axios.get(`http://localhost:8000/courses/${id}/`);
         setCourse(res.data);
       } catch (error) {
         console.error('Error fetching course details:', error);
@@ -30,11 +30,11 @@ const CourseDetail = () => {
 
   useEffect(() => {
     const checkEnrollment = async () => {
-      if (!userEmail || !id) return;
+      if (!userEmail || !id || !course) return;
       try {
-        const res = await axios.get('http://localhost:8000/api/enrollments');
+        const res = await axios.get('http://localhost:8000/enrollments');
         const userEnrollments = res.data.filter(
-          (e) => e.user.useremail === userEmail && e.course.id === parseInt(id)
+          (e) => e.useremail === userEmail && e.course === course.title
         );
 
         if (userEnrollments.length > 0) {
@@ -56,11 +56,16 @@ const CourseDetail = () => {
     };
 
     checkEnrollment();
-  }, [userEmail, id]);
+  }, [userEmail, id, course]);
 
   const handleEnroll = async () => {
+    if (!userEmail) {
+      setMessage('Please log in first.');
+      return;
+    }
+
     try {
-      const res = await axios.post('http://localhost:8000/api/enroll/', {
+      const res = await axios.post('http://localhost:8000/enroll/', {
         useremail: userEmail,
         course_id: id,
       });
@@ -90,7 +95,9 @@ const CourseDetail = () => {
           ) : (
             <button className="enroll-btn" onClick={handleEnroll}>Enroll Now</button>
           )}
-          {message && <p className="enroll-message">{message}</p>}
+          {message && (
+            <p className="enroll-message" style={{ color: 'lime', marginTop: '10px' }}>{message}</p>
+          )}
         </div>
       </div>
     </motion.div>

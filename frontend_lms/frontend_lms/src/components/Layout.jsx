@@ -24,6 +24,14 @@ export default function Layout() {
     setShowDropdown(!showDropdown);
   };
 
+  const handleAdminClick = () => {
+    if (userEmail === 'admin@email.com') {
+      navigate('/adminpanel');
+    } else {
+      navigate('/login');
+    }
+  };
+
   return (
     <>
       <motion.nav
@@ -50,7 +58,7 @@ export default function Layout() {
           <div className={`navbar-center ${isOpen ? 'open' : ''}`}>
             <Link to="/">Home</Link>
             <Link to="/courses">Courses</Link>
-            <Link to="/adminpanel">AdminPanel</Link>
+            <span onClick={handleAdminClick} style={{ cursor: 'pointer' }}>AdminPanel</span>
           </div>
 
           <div className="navbar-right">
